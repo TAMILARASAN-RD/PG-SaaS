@@ -77,24 +77,28 @@ export default function OwnerDashboard() {
             {/* Primary Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatCard
+                    href="/owner/properties"
                     icon={<Building2 className="w-6 h-6 text-blue-600" />}
                     title="Properties"
                     value={stats.buildings}
                     subtitle={`${stats.rooms} Total Rooms`}
                 />
                 <StatCard
+                    href="/owner/tenants"
                     icon={<Users className="w-6 h-6 text-indigo-600" />}
                     title="Active Tenants"
                     value={stats.occupancy.activeTenants}
                     subtitle={`Across all buildings`}
                 />
                 <StatCard
+                    href="/owner/properties"
                     icon={<Bed className="w-6 h-6 text-green-600" />}
                     title="Occupancy"
                     value={`${Math.round((stats.occupancy.occupiedBeds / (stats.occupancy.totalBeds || 1)) * 100)}%`}
                     subtitle={`${stats.occupancy.availableBeds} Beds Available`}
                 />
                 <StatCard
+                    href="/owner/complaints"
                     icon={<AlertCircle className="w-6 h-6 text-orange-600" />}
                     title="Open Complaints"
                     value={openComplaints}
@@ -145,9 +149,9 @@ export default function OwnerDashboard() {
     );
 }
 
-function StatCard({ icon, title, value, subtitle }: { icon: React.ReactNode, title: string, value: string | number, subtitle: string }) {
-    return (
-        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex flex-col">
+function StatCard({ href, icon, title, value, subtitle }: { href?: string, icon: React.ReactNode, title: string, value: string | number, subtitle: string }) {
+    const cardContent = (
+        <>
             <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 bg-gray-50 rounded-lg">
                     {icon}
@@ -158,6 +162,22 @@ function StatCard({ icon, title, value, subtitle }: { icon: React.ReactNode, tit
                 <p className="text-3xl font-bold text-gray-900">{value}</p>
                 <p className="text-sm text-gray-500 mt-1 font-medium">{subtitle}</p>
             </div>
+        </>
+    );
+
+    const className = "bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex flex-col hover:border-blue-200 hover:shadow-md transition-all group";
+
+    if (href) {
+        return (
+            <Link href={href} className={className}>
+                {cardContent}
+            </Link>
+        );
+    }
+
+    return (
+        <div className={className}>
+            {cardContent}
         </div>
     );
 }

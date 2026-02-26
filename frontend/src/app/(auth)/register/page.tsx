@@ -6,7 +6,10 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/ToastProvider';
 import api from '@/lib/api';
 
+type RoleType = 'OWNER' | 'TENANT';
+
 export default function RegisterPage() {
+    const [role, setRole] = useState<RoleType>('TENANT');
     const [formData, setFormData] = useState({ name: '', email: '', password: '', phone: '' });
     const [loading, setLoading] = useState(false);
     const router = useRouter();
@@ -16,7 +19,16 @@ export default function RegisterPage() {
         e.preventDefault();
         setLoading(true);
         try {
-            await api.post('/auth/register', formData);
+            if (role === 'OWNER') {
+                await api.post('/auth/register', {
+                    name: formData.name, email: formData.email, password: formData.password, phone: formData.phone
+                });
+            } else {
+                await api.post('/auth/register/tenant', {
+                    name: formData.name, email: formData.email, password: formData.password
+                });
+            }
+
             showToast('Registration successful! Please log in.', 'success');
             router.push('/login');
         } catch (err: any) {
@@ -29,12 +41,29 @@ export default function RegisterPage() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12">
             <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-lg border border-gray-100">
-                <div className="text-center mb-8">
+                <div className="text-center mb-6">
                     <h1 className="text-3xl font-bold text-blue-600 mb-2">StayWise</h1>
-                    <p className="text-gray-500">Create an Owner Account</p>
+                    <p className="text-gray-500">Create an Account</p>
                 </div>
 
-                <form onSubmit={handleRegister} className="space-y-5">
+                <div className="flex bg-gray-100 p-1 rounded-lg mb-6">
+                    <button
+                        type="button"
+                        onClick={() => setRole('TENANT')}
+                        className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${role === 'TENANT' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        Tenant
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setRole('OWNER')}
+                        className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${role === 'OWNER' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        Property Owner
+                    </button>
+                </div>
+
+                <form onSubmit={handleRegister} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                         <input
@@ -55,15 +84,19 @@ export default function RegisterPage() {
                             className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Phone (Optional)</label>
-                        <input
-                            type="text"
-                            value={formData.phone}
-                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                        />
-                    </div>
+
+                    {role === 'OWNER' && (
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Phone (Optional)</label>
+                            <input
+                                type="text"
+                                value={formData.phone}
+                                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                            />
+                        </div>
+                    )}
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                         <input
@@ -79,16 +112,16 @@ export default function RegisterPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                        className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors mt-2"
                     >
-                        {loading ? 'Registering...' : 'Complete Registration'}
+                        {loading ? 'Processing...' : `Register as ${role === 'OWNER' ? 'Owner' : 'Tenant'}`}
                     </button>
                 </form>
 
                 <p className="mt-6 text-center text-sm text-gray-600">
                     Already have an account?{' '}
                     <Link href="/login" className="text-blue-600 font-medium hover:underline">
-                        Sign In
+                        Log In
                     </Link>
                 </p>
             </div>

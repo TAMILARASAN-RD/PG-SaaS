@@ -32,7 +32,7 @@ export default function LoginPage() {
             <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-lg border border-gray-100">
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold text-blue-600 mb-2">StayWise</h1>
-                    <p className="text-gray-500">Sign in to your account</p>
+                    <p className="text-gray-500">Log in to your account</p>
                 </div>
 
                 <form onSubmit={handleLogin} className="space-y-6">
@@ -65,14 +65,14 @@ export default function LoginPage() {
                         disabled={loading}
                         className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
                     >
-                        {loading ? 'Signing in...' : 'Sign In'}
+                        {loading ? 'Logging in...' : 'Log In'}
                     </button>
                 </form>
 
                 <p className="mt-6 text-center text-sm text-gray-600">
                     Don't have an account?{' '}
                     <Link href="/register" className="text-blue-600 font-medium hover:underline">
-                        Register as Owner
+                        Register
                     </Link>
                 </p>
             </div>

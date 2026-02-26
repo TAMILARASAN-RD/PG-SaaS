@@ -55,9 +55,13 @@ export const assignTenant = async (req: AuthRequest, res: Response) => {
         if (!bed) return res.status(404).json({ error: 'Bed not found' });
         if (bed.status !== 'AVAILABLE') return res.status(400).json({ error: 'Bed is currently occupied' });
 
-        // Validate tenant exists, belongs to owner, and has TENANT role
-        const tenant = await prisma.user.findFirst({ where: { id: data.tenantId, ownerId, role: 'TENANT' } });
+        // Validate tenant exists and has TENANT role.
+        // Unbound tenants will have ownerId as null. If they are bound, it must match current owner.
+        const tenant = await prisma.user.findFirst({ where: { id: data.tenantId, role: 'TENANT' } });
         if (!tenant) return res.status(404).json({ error: 'Tenant not found' });
+        if (tenant.ownerId && tenant.ownerId !== ownerId) {
+            return res.status(400).json({ error: 'Tenant is already managed by a different owner' });
+        }
 
         const assignment = await prisma.$transaction(async (tx) => {
             // Create assignment
@@ -78,6 +82,14 @@ export const assignTenant = async (req: AuthRequest, res: Response) => {
                 where: { id: data.bedId },
                 data: { status: 'OCCUPIED' }
             });
+
+            // Link the tenant to this owner if they were previously unbound
+            if (!tenant.ownerId) {
+                await tx.user.update({
+                    where: { id: tenant.id },
+                    data: { ownerId }
+                });
+            }
 
             return newAssignment;
         });
@@ -116,11 +128,13 @@ export const vacateTenant = async (req: AuthRequest, res: Response) => {
                 }
             });
 
-            // Mark bed AVAILABLE
-            await tx.bed.update({
-                where: { id: assignment.bedId },
-                data: { status: 'AVAILABLE' }
-            });
+            // Mark bed AVAILABLE if they had one
+            if (assignment.bedId) {
+                await tx.bed.update({
+                    where: { id: assignment.bedId },
+                    data: { status: 'AVAILABLE' }
+                });
+            }
         });
 
         res.status(200).json({ message: 'Tenant vacated successfully' });
@@ -151,3 +165,28 @@ export const getOccupancyDashboard = async (req: AuthRequest, res: Response) => 
         res.status(500).json({ error: 'Internal server error fetching occupancy' });
     }
 }
+
+export const listTenants = async (req: AuthRequest, res: Response) => {
+    try {
+        const ownerId = req.user!.ownerId!;
+        const assignments = await prisma.tenantAssignment.findMany({
+            where: { ownerId, status: 'ACTIVE' },
+            include: {
+                tenant: { select: { id: true, name: true, email: true } },
+                bed: {
+                    include: {
+                        room: {
+                            include: { building: true }
+                        }
+                    }
+                }
+            },
+            orderBy: { startDate: 'desc' }
+        });
+
+        res.status(200).json(assignments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error fetching tenants' });
+    }
+};

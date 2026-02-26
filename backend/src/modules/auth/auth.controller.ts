@@ -58,6 +58,38 @@ export const registerOwner = async (req: Request, res: Response) => {
     }
 };
 
+const registerTenantSchema = z.object({
+    name: z.string().min(1, "Name is required"),
+    email: z.string().email("Invalid email"),
+    password: z.string().min(6, "Password must be at least 6 characters")
+});
+
+export const registerTenant = async (req: Request, res: Response) => {
+    try {
+        const data = registerTenantSchema.parse(req.body);
+
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+
+        const tenant = await prisma.user.create({
+            data: {
+                name: data.name,
+                email: data.email,
+                password: hashedPassword,
+                role: 'TENANT',
+                ownerId: null, // Tenant starts unassigned to an owner
+            }
+        });
+
+        res.status(201).json({ message: 'Tenant registered successfully', tenantId: tenant.id });
+    } catch (error: any) {
+        if (error instanceof z.ZodError) {
+            return res.status(400).json({ error: (error as any).errors });
+        }
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error during tenant registration' });
+    }
+};
+
 const loginSchema = z.object({
     email: z.string().email("Invalid email"),
     password: z.string()

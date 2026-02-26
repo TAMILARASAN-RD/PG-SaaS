@@ -126,7 +126,48 @@
 - [x] Verify `prisma migrate deploy` for prod.
 - [x] Ensure absolute route protections & tenant data isolation.
 
-## [ ] PHASE 16 — DEPLOYMENT ORDER
-- [ ] Push Backend to GitHub & Deploy to Render/Railway.
-- [ ] Run migrations logic.
-- [ ] Deploy Frontend to Vercel & configure environments.
+## [x] PHASE 16 — DEPLOYMENT ORDER
+- [x] Push Backend to GitHub & Deploy to Render/Railway.
+- [x] Run migrations logic.
+- [x] Deploy Frontend to Vercel & configure environments.
+
+---
+
+## [x] PHASE 17 — DETAILED FRONTEND PAGES & UX
+- [x] Implement global ripple effect on all buttons.
+- [x] Build functional Add Building modal/logic in `/owner/properties`.
+- [x] Build `/owner/tenants` list view.
+
+## [x] PHASE 18 — LANDING PAGE & TENANT REGISTRATION
+- [x] Build public Landing Page at `/`.
+- [x] Implement Tenant Registration API and UI flow.
+
+## [x] PHASE 19 — LANDING PAGE VIDEO BACKGROUND
+- [x] Create React Canvas image sequence player.
+- [x] Update Landing Page styling to overlay the video.
+
+## [x] PHASE 20 — END-TO-END TESTING & FIXES
+- [x] Implement missing "Manage Structure" functionality (adding rooms/beds) on the `/owner/properties` page.
+- [x] Test Owner Registration -> Login -> Add Building -> Manage Structure -> Add Room -> Add Bed.
+- [x] Test Tenant Registration -> Login -> View Dashboard.
+- [x] Ensure all Dashboard Links and visual components function without errors or 404s.
+
+## [x] PHASE 21 — MULTI-PROPERTY TYPE SUPPORT
+- [x] Create implementation plan for Prop Types & DB Changes
+- [x] Prisma Migration for `type` enum and flexible assignments
+- [x] Update Add Building UI with Property Type dropdown
+- [x] Update Manage Structure UI to hide Beds for Office/Shops
+- [x] User testing and verification
+
+## [x] PHASE 22 — UI POLISH
+- [x] Dashboard metric cards are now clickable links
+
+## [x] PHASE 23 & 24 — AUTH & TENANT REGISTRATION
+- [x] Convert 'Sign In' to 'Log In' terminology.
+- [x] Combine Owner & Tenant Registration flows into a single unified page with a role toggle.
+- [x] Detach Tenant registration from strictly requiring an `ownerEmail` so they can register unbound.
+- [x] Modify Tenant Assignment backend to allow strictly unbound accounts to be linked to owners post-registration.
+- [x] Ensure `AuthContext` continues automatically routing users to their proper Dashboard based on their role upon login.
+
+## [x] PHASE 25 — NAVIGATION FIXES
+- [x] Fix the "Manage Structure" button on Property Cards to route correctly to the builder.

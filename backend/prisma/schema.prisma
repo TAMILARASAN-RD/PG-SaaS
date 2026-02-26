@@ -22,6 +22,13 @@ enum BedStatus {
   OCCUPIED
 }
 
+enum PropertyType {
+  PG
+  OFFICE
+  HOUSE
+  SHOP
+}
+
 enum AssignmentStatus {
   ACTIVE
   INACTIVE
@@ -73,11 +80,13 @@ model Building {
   
   name      String
   address   String?
+  type      PropertyType @default(PG)
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
   rooms     Room[]
+  assignments TenantAssignment[]
 }
 
 model Room {
@@ -95,6 +104,7 @@ model Room {
   updatedAt  DateTime @updatedAt
   
   beds       Bed[]
+  assignments TenantAssignment[]
 }
 
 model Bed {
@@ -122,8 +132,15 @@ model TenantAssignment {
   tenantId   String
   tenant     User             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   
-  bedId      String
-  bed        Bed              @relation(fields: [bedId], references: [id], onDelete: Cascade)
+  // Flexible assignment target based on property type
+  bedId      String?
+  bed        Bed?             @relation(fields: [bedId], references: [id], onDelete: SetNull)
+  
+  roomId     String?
+  room       Room?            @relation(fields: [roomId], references: [id], onDelete: SetNull)
+  
+  assignedBuildingId String?
+  assignedBuilding   Building? @relation(fields: [assignedBuildingId], references: [id], onDelete: SetNull)
   
   startDate  DateTime
   endDate    DateTime?

@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import TopNav from '@/components/TopNav';
 import { useRouter } from 'next/navigation';
@@ -9,11 +9,14 @@ export default function OwnerLayout({ children }: { children: React.ReactNode })
     const { user, loading } = useAuth();
     const router = useRouter();
 
-    if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    useEffect(() => {
+        if (!loading && (!user || (user.role !== 'OWNER' && user.role !== 'MANAGER'))) {
+            router.replace('/login');
+        }
+    }, [user, loading, router]);
 
-    if (!user || (user.role !== 'OWNER' && user.role !== 'MANAGER')) {
-        router.replace('/login');
-        return null;
+    if (loading || (!user || (user.role !== 'OWNER' && user.role !== 'MANAGER'))) {
+        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
     }
 
     return (
