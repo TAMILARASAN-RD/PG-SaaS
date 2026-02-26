@@ -1,0 +1,255 @@
+
+--- PAGE 154 ---
+🚀  MASTER  EXECUTION  ORDER  
+Project:  StayWise  V1  (Full  SaaS  MVP)  
+ 
+🔵  GLOBAL  RULES  (Antigravity  must  follow)  
+1.  Never  skip  steps.  
+ 2.  Complete  each  phase  fully  before  moving  forward.  
+ 3.  Do  not  refactor  previously  working  modules  unless  breaking.  
+ 4.  Maintain  multi-tenant  isolation  using  ownerId.  
+ 5.  Use  Prisma  migrations  only.  
+ 6.  Do  not  introduce  external  libraries  unless  specified.  
+ 7.  Keep  code  production-structured.  
+ 8.  Use  environment  variables  strictly.  
+ 
+ 
+PHASE  1  —  PROJECT  INITIALIZATION  
+1 ⃣  Create  Folder  Structure  staywise/  ├──  backend/  └──  frontend/   
+2 ⃣  Backend  Setup  
+--- PAGE 155 ---
+Inside  /backend  
+Initialize:  
+npm  init  -y  npm  install  express  cors  dotenv  jsonwebtoken  bcrypt  zod  npm  install  prisma  @prisma/client  npm  install  pdfkit  npm  install  -D  typescript  ts-node-dev  @types/node  @types/express  @types/jsonwebtoken  
+@types/bcrypt
+ 
+@types/pdfkit
+ 
+Initialize  TypeScript:  
+npx  tsc  --init  
+Initialize  Prisma:  
+npx  prisma  init   
+3 ⃣  Setup  PostgreSQL  (Local)  
+Ensure  local  Postgres  running.  
+Set  .env:  
+DATABASE_URL="postgresql://postgres:password@localhost:5432/staywise"  JWT_SECRET="very_long_secure_random_string"  JWT_EXPIRES_IN=7d  PORT=4000  NODE_ENV=development   
+PHASE  2  —  DATABASE  SCHEMA  
+(CRITICAL
+ 
+FOUNDATION)
+ 
+Antigravity  must  generate  full  schema:  
+Required  Models  
+●  Owner  
+ 
+--- PAGE 156 ---
+●  User  (roles:  SUPER_ADMIN,  OWNER,  MANAGER,  TENANT)  
+ ●  Building  
+ ●  Room  
+ ●  Bed  
+ ●  TenantAssignment  
+ ●  Payment  
+ ●  Complaint  
+ 
+Requirements:  
+●  Multi-tenant  isolation  by  ownerId  
+ ●  Unique  constraint  on  monthly  rent  period:  
+ 
+ 
+@@unique([tenantAssignmentId,
+ 
+periodYear,
+ 
+periodMonth])
+ 
+ 
+After  writing  schema:  
+npx  prisma  migrate  dev  --name  init   
+PHASE  3  —  CORE  BACKEND  
+STRUCTURE
+ 
+Create:  
+src/   server.ts   app.ts   lib/     prisma.ts   middlewares/     auth.ts   modules/  
+--- PAGE 157 ---
+   auth/     buildings/     rooms/     beds/     tenants/     rent/     complaints/   
+PHASE  4  —  AUTH  SYSTEM  
+Implement:  
+●  Register  OWNER  
+ ●  Login  
+ ●  JWT  middleware  
+ ●  Role-based  access  control  
+ ●  ownerId  injection  from  token  
+ 
+Must  protect:  
+●  Buildings  
+ ●  Rooms  
+ ●  Beds  
+ ●  Assignments  
+ ●  Rent  
+ ●  Complaints  
+ 
+ 
+PHASE  5  —  PROPERTY  MANAGEMENT  
+--- PAGE 158 ---
+Implement  APIs:  
+●  Create  building  
+ ●  List  buildings  
+ ●  Create  room  under  building  
+ ●  List  rooms  
+ ●  Create  beds  under  room  
+ ●  List  beds  
+ ●  Auto-set  bed  status  AVAILABLE  /  OCCUPIED  
+ 
+ 
+PHASE  6  —  TENANT  MANAGEMENT  
+Implement:  
+●  Create  tenant  (by  Owner)  
+ ●  Assign  tenant  to  bed  
+ ●  Set  bed  status  OCCUPIED  
+ ●  Occupancy  dashboard  endpoint  
+ ●  Vacate  endpoint:  
+ ○  Set  assignment  INACTIVE  
+ ○  Set  bed  AVAILABLE  
+ ○  Save  endedAt  +  endedNote  
+ 
+ 
+--- PAGE 159 ---
+PHASE  7  —  RENT  MODULE  (Monthly  
+System)
+ 
+Implement:  
+●  Auto  current  period  logic  
+ ●  GET  rent  summary  
+ ●  GET  rent  assignments  
+ ●  Mark  paid  
+ ○  method  
+ ○  reference  
+ ○  note  
+ ●  Mark  unpaid  
+ ●  Payment  history  
+ ●  Overdue  detection  logic  
+ 
+ 
+PHASE  8  —  RECEIPT  SYSTEM  
+Implement:  
+●  PDFKit  receipt  generation  
+ ●  Receipt  No  format:  
+ 
+ 
+SW-YYYYMM-XXXXXXXX
+ 
+ ●  Download  endpoint  
+ 
+--- PAGE 160 ---
+●  WhatsApp  message  endpoint  
+ ●  Multi-tenant  security  check  before  generating  
+ 
+ 
+PHASE  9  —  COMPLAINT  SYSTEM  
+Implement:  
+●  Tenant  create  complaint  
+ ●  Owner  fetch  complaints  
+ ●  Owner  resolve  complaint  
+ ●  Tenant  fetch  own  complaints  
+ 
+ 
+PHASE  10  —  FRONTEND  (Next.js  App  
+Router)
+ 
+Inside  /frontend:  
+npx  create-next-app@latest  .  --typescript  
+Install  nothing  extra.  
+Set  .env.local:  
+NEXT_PUBLIC_API_URL=http://localhost:4000   
+PHASE  11  —  FRONTEND  STRUCTURE  
+Create:  
+--- PAGE 161 ---
+app/   login/   owner/     page.tsx  (Dashboard)     rent/     complaints/     tenants/     occupancy/   tenant/     page.tsx     rent/     complaints/  components/   AuthProvider   Protected   TopNav   ToastProvider  lib/   api.ts   download.ts   
+PHASE  12  —  OWNER  DASHBOARD  
+Must  include:  
+●  Buildings  count  
+ ●  Rooms  count  
+ ●  Beds  count  
+ ●  Occupied  count  
+ ●  Available  count  
+ ●  Rent  summary  
+ ●  Complaint  summary  
+ ●  Quick  links  
+ 
+--- PAGE 162 ---
+ 
+PHASE  13  —  TENANT  PANEL  
+Must  include:  
+●  Assigned  building/room/bed  
+ ●  This  month  rent  status  
+ ●  Raise  complaint  
+ ●  Complaint  history  
+ 
+ 
+PHASE  14  —  UX  POLISH  
+Add:  
+●  Toast  system  (no  alert)  
+ ●  Proper  button  disabled  states  
+ ●  Refresh  buttons  
+ ●  Error  handling  consistency  
+ 
+ 
+PHASE  15  —  PRE-LAUNCH  HARDENING  
+1.  Set  NODE_ENV  check  for  CORS.  
+ 2.  Strong  JWT  secret.  
+ 3.  Use  prisma  migrate  deploy for  production.  
+ 
+--- PAGE 163 ---
+4.  Verify  no  routes  exposed  without  auth.  
+ 5.  Ensure  no  owner  can  access  other  owner's  data.  
+ 
+ 
+PHASE  16  —  DEPLOYMENT  ORDER  
+Backend  
+1.  Push  to  GitHub.  
+ 2.  Deploy  to  Render/Railway.  
+ 3.  Set:  
+ ○  DATABASE_URL  
+ ○  JWT_SECRET  
+ ○  NODE_ENV=production  
+ 4.  Run:  
+ 
+ 
+prisma
+ 
+migrate
+ 
+deploy
+ 
+ 
+Frontend  
+1.  Deploy  to  Vercel.  
+ 2.  Set:  
+ 
+ 
+NEXT_PUBLIC_API_URL=https://backend-url
+ 
+ 
+ 
+FINAL  EXECUTION  CONDITION  
+--- PAGE 164 ---
+Antigravity  must  not:  
+●  Skip  schema  constraints  
+ ●  Skip  role  validation  
+ ●  Mix  tenant  data  across  owners  
+ ●  Generate  unnecessary  libraries  
+ ●  Break  modular  structure  
+ 
+ 
+📊  FINAL  STATUS  AFTER  EXECUTION  
+When  all  phases  complete:  
+●  Multi-tenant  PG  management  SaaS  working  
+ ●  Rent  monthly  system  with  PDF  receipts  
+ ●  WhatsApp  integration  
+ ●  Vacate  system  
+ ●  Complaint  system  
+ ●  Owner  dashboard  
+ ●  Tenant  portal  
+ 
+StayWise  V1  =  Production  Ready  MVP  
+ 
