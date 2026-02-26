@@ -11,6 +11,8 @@ build/
 .env.development.local
 .env.test.local
 .env.production.local
+backend/.env
+frontend/.env.local
 
 # Logs
 npm-debug.log*
@@ -35,3 +37,11 @@ coverage/
 *.log
 *.bak
 *.tmp
+
+# Next.js & Subfolders
+frontend/.next/
+frontend/out/
+backend/node_modules/
+frontend/node_modules/
+backend/dist/
+frontend/dist/

@@ -27,8 +27,8 @@
 - [x] Initialize Prisma (`npx prisma init`)
 - [x] Setup PostgreSQL (Local) and `.env` variables.
 
-## [ ] PHASE 2 — DATABASE SCHEMA (CRITICAL FOUNDATION)
-- [ ] Create Prisma schema with required models:
+## [x] PHASE 2 — DATABASE SCHEMA (CRITICAL FOUNDATION)
+- [x] Create Prisma schema with required models:
   - `Owner`
   - `User` (roles: SUPER_ADMIN, OWNER, MANAGER, TENANT)
   - `Building`
@@ -37,86 +37,94 @@
   - `TenantAssignment`
   - `Payment`
   - `Complaint`
-- [ ] Implement Multi-tenant isolation by `ownerId`.
-- [ ] Add unique constraint on monthly rent period: `@@unique([tenantAssignmentId, periodYear, periodMonth])`.
-- [ ] Run `npx prisma migrate dev --name init`.
+- [x] Implement Multi-tenant isolation by `ownerId`.
+- [x] Add unique constraint on monthly rent period: `@@unique([tenantAssignmentId, periodYear, periodMonth])`.
+- [x] Run `npx prisma migrate dev --name init`.
 
-## [ ] PHASE 3 — CORE BACKEND STRUCTURE
-- [ ] Create standard directory structure under `backend/src/`:
+## [x] PHASE 3 — CORE BACKEND STRUCTURE
+- [x] Create standard directory structure under `backend/src/`:
   - `server.ts`, `app.ts`
   - `lib/prisma.ts`
   - `middlewares/auth.ts`
   - `modules/` (auth, buildings, rooms, beds, tenants, rent, complaints)
 
-## [ ] PHASE 4 — AUTH SYSTEM
-- [ ] Implement Register OWNER.
-- [ ] Implement Login.
-- [ ] Create JWT middleware.
-- [ ] Implement Role-based access control.
-- [ ] Inject `ownerId` from token.
-- [ ] Protect all appropriate routes.
+## [x] PHASE 4 — AUTH SYSTEM
+- [x] Implement Register OWNER.
+- [x] Implement Login.
+- [x] Create JWT middleware.
+- [x] Implement Role-based access control.
+- [x] Inject `ownerId` from token.
+- [x] Protect all appropriate routes.
 
-## [ ] PHASE 5 — PROPERTY MANAGEMENT
-- [ ] Create/List building APIs.
-- [ ] Create/List room APIs.
-- [ ] Create/List bed APIs.
-- [ ] Implement auto-set bed status (AVAILABLE / OCCUPIED).
+## [x] PHASE 5 — PROPERTY MANAGEMENT
+- [x] Create/List building APIs.
+- [x] Create/List room APIs.
+- [x] Create/List bed APIs.
+- [x] Auto-set bed status (AVAILABLE / OCCUPIED).
 
-## [ ] PHASE 6 — TENANT MANAGEMENT
-- [ ] Create tenant (by Owner).
-- [ ] Assign tenant to bed and update bed status to OCCUPIED.
-- [ ] Occupancy dashboard endpoint.
-- [ ] Vacate endpoint (set assignment INACTIVE, bed AVAILABLE, save `endedAt` + `endedNote`).
+## [x] PHASE 6 — TENANT MANAGEMENT
+- [x] Create tenant (by Owner).
+- [x] Assign tenant to bed.
+- [x] Set bed status OCCUPIED.
+- [x] Occupancy dashboard endpoint.
+- [x] Vacate endpoint:
+  - [x] Set assignment INACTIVE.
+  - [x] Set bed AVAILABLE.
+  - [x] Save `endedAt` + `endedNote`).
 
-## [ ] PHASE 7 — RENT MODULE (Monthly System)
-- [ ] Implement logic for automatic current period.
-- [ ] GET rent summary & assignments.
-- [ ] Mark paid (method, reference, note).
-- [ ] Mark unpaid.
-- [ ] Payment history & overdue detection logic.
+## [x] PHASE 7 — RENT MODULE (Monthly System)
+- [x] Implement logic for automatic current period.
+- [x] GET rent summary.
+- [x] GET rent assignments.
+- [x] Mark paid (method, reference, note).
+- [x] Mark unpaid.
+- [x] Payment history & overdue detection logic.
 
-## [ ] PHASE 8 — RECEIPT SYSTEM
-- [ ] PDFKit receipt generation.
-- [ ] Format Receipt No: `SW-YYYYMM-XXXXXXXX`.
-- [ ] Download endpoint & WhatsApp message endpoint.
-- [ ] Ensure multi-tenant security verification.
+## [x] PHASE 8 — RECEIPT SYSTEM
+- [x] PDFKit receipt generation.
+- [x] Receipt No format (`SW-YYYYMM-XXXXXXXX`).
+- [x] Download endpoint (`/receipts/:paymentId/download`).
+- [x] WhatsApp message skeleton endpoint.
+- [x] Multi-tenant security check.rification.
 
-## [ ] PHASE 9 — COMPLAINT SYSTEM
-- [ ] Tenant create complaint.
-- [ ] Owner fetch/resolve complaints.
-- [ ] Tenant fetch own complaints.
+## [x] PHASE 9 — COMPLAINT SYSTEM
+- [x] Tenant create complaint.
+- [x] GET complaints (Owner).
+- [x] Update complaint status (Owner).
+- [x] Tenant fetch own complaints.
 
-## [ ] PHASE 10 — FRONTEND (Next.js App Router)
-- [ ] Setup Next.js inside `/frontend/`: `npx create-next-app@latest . --typescript`.
-- [ ] Set `.env.local`: `NEXT_PUBLIC_API_URL=http://localhost:4000`.
+## [x] PHASE 10 — FRONTEND (Next.js App Router)
+- [x] Setup Next.js inside `/frontend/`: `npx create-next-app@latest . --typescript`.
+- [x] Set `.env.local`: `NEXT_PUBLIC_API_URL=http://localhost:4000`.
 
-## [ ] PHASE 11 — FRONTEND STRUCTURE
-- [ ] Create folders:
-  - `app/login/`, `app/owner/`, `app/tenant/`
-  - `components/` (AuthProvider, Protected, TopNav, ToastProvider)
-  - `lib/api.ts`, `lib/download.ts`
+## [x] PHASE 11 — FRONTEND STRUCTURE
+- [x] Create folders:
+  - `app/login/`, `app/register/`, `app/(dashboards)/owner/`, `app/(dashboards)/tenant/`
+  - `components/` (TopNav, ToastProvider)
+  - `contexts/` (AuthContext)
+  - `lib/api.ts`
 
-## [ ] PHASE 12 — OWNER DASHBOARD
-- [ ] Display Buildings, Rooms, Beds counts.
-- [ ] Display Occupied / Available counts.
-- [ ] Display Rent and Complaint summaries.
-- [ ] Setup Quick links.
+## [x] PHASE 12 — OWNER DASHBOARD
+- [x] Display Buildings, Rooms, Beds counts.
+- [x] Display Occupied / Available counts.
+- [x] Display Rent and Complaint summaries.
+- [x] Setup Quick links.
 
-## [ ] PHASE 13 — TENANT PANEL
-- [ ] Display assigned property details.
-- [ ] Display current month's rent status.
-- [ ] Options to Raise & View complaint history.
+## [x] PHASE 13 — TENANT PANEL
+- [x] Display assigned property details.
+- [x] Display current month's rent status.
+- [x] Options to Raise & View complaint history.
 
-## [ ] PHASE 14 — UX POLISH
-- [ ] Implement Toast system (no alert).
-- [ ] Ensure proper button disabled states & refresh buttons.
-- [ ] Clean up error handling consistency.
+## [x] PHASE 14 — UX POLISH
+- [x] Implement Toast system (no alert).
+- [x] Ensure proper button disabled states & refresh buttons.
+- [x] Clean up error handling consistency.
 
-## [ ] PHASE 15 — PRE-LAUNCH HARDENING
-- [ ] Strict CORS based on `NODE_ENV`.
-- [ ] Strong JWT secret enforcement.
-- [ ] Verify `prisma migrate deploy` for prod.
-- [ ] Ensure absolute route protections & tenant data isolation.
+## [x] PHASE 15 — PRE-LAUNCH HARDENING
+- [x] Strict CORS based on `NODE_ENV`.
+- [x] Strong JWT secret enforcement.
+- [x] Verify `prisma migrate deploy` for prod.
+- [x] Ensure absolute route protections & tenant data isolation.
 
 ## [ ] PHASE 16 — DEPLOYMENT ORDER
 - [ ] Push Backend to GitHub & Deploy to Render/Railway.

@@ -1,14 +1,186 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  OWNER
+  MANAGER
+  TENANT
+}
+
+enum BedStatus {
+  AVAILABLE
+  OCCUPIED
+}
+
+enum AssignmentStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum PaymentStatus {
+  PAID
+  UNPAID
+}
+
+model Owner {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users              User[]
+  buildings          Building[]
+  rooms              Room[]
+  beds               Bed[]
+  tenantAssignments  TenantAssignment[]
+  payments           Payment[]
+  complaints         Complaint[]
+}
+
+model User {
+  id        String   @id @default(uuid())
+  ownerId   String?  // Nullable for SUPER_ADMIN, required for others
+  owner     Owner?   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(TENANT)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  tenantAssignments TenantAssignment[]
+  complaints        Complaint[]
+}
+
+model Building {
+  id        String   @id @default(uuid())
+  ownerId   String
+  owner     Owner    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  name      String
+  address   String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  rooms     Room[]
+}
+
+model Room {
+  id         String   @id @default(uuid())
+  ownerId    String
+  owner      Owner    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  buildingId String
+  building   Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  
+  roomNumber String
+  floor      Int?
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  beds       Bed[]
+}
+
+model Bed {
+  id         String    @id @default(uuid())
+  ownerId    String
+  owner      Owner     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  roomId     String
+  room       Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  
+  bedNumber  String
+  status     BedStatus @default(AVAILABLE)
+  
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  
+  assignments TenantAssignment[]
+}
+
+model TenantAssignment {
+  id         String           @id @default(uuid())
+  ownerId    String
+  owner      Owner            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  tenantId   String
+  tenant     User             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  bedId      String
+  bed        Bed              @relation(fields: [bedId], references: [id], onDelete: Cascade)
+  
+  startDate  DateTime
+  endDate    DateTime?
+  status     AssignmentStatus @default(ACTIVE)
+  
+  endedAt    DateTime?
+  endedNote  String?
+  
+  monthlyRent Float
+  deposit     Float?
+  
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  
+  payments   Payment[]
+}
+
+model Payment {
+  id                 String           @id @default(uuid())
+  ownerId            String
+  owner              Owner            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  tenantAssignmentId String
+  tenantAssignment   TenantAssignment @relation(fields: [tenantAssignmentId], references: [id], onDelete: Cascade)
+  
+  periodYear         Int
+  periodMonth        Int
+  
+  amount             Float
+  status             PaymentStatus    @default(UNPAID)
+  
+  paidAt             DateTime?
+  paymentMethod      String?          // e.g. Cash, UPI, Bank Transfer
+  reference          String?
+  note               String?
+  
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  
+  @@unique([tenantAssignmentId, periodYear, periodMonth])
+}
+
+model Complaint {
+  id          String   @id @default(uuid())
+  ownerId     String
+  owner       Owner    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  tenantId    String
+  tenant      User     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  title       String
+  description String
+  isResolved  Boolean  @default(false)
+  
+  resolvedAt  DateTime?
+  resolvedNote String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
