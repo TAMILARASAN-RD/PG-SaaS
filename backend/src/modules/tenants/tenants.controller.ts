@@ -172,14 +172,16 @@ export const listTenants = async (req: AuthRequest, res: Response) => {
         const assignments = await prisma.tenantAssignment.findMany({
             where: { ownerId, status: 'ACTIVE' },
             include: {
-                tenant: { select: { id: true, name: true, email: true } },
+                tenant: { select: { id: true, name: true, email: true, phone: true, customTenantId: true } },
                 bed: {
                     include: {
                         room: {
                             include: { building: true }
                         }
                     }
-                }
+                },
+                room: { include: { building: true } },
+                assignedBuilding: true
             },
             orderBy: { startDate: 'desc' }
         });
@@ -188,5 +190,117 @@ export const listTenants = async (req: AuthRequest, res: Response) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error fetching tenants' });
+    }
+};
+
+const addAssignTenantSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Invalid email').optional(),
+    phone: z.string().min(10, 'Valid WhatsApp number is required'),
+    buildingId: z.string().uuid(),
+    roomId: z.string().uuid().optional(),
+    bedId: z.string().uuid().optional(),
+    startDate: z.string(),
+    monthlyRent: z.number().positive(),
+    deposit: z.number().optional()
+});
+
+export const addAndAssignTenant = async (req: AuthRequest, res: Response) => {
+    try {
+        const data = addAssignTenantSchema.parse(req.body);
+        const ownerId = req.user!.ownerId!;
+
+        const result = await prisma.$transaction(async (tx) => {
+            // 1. Get Owner details (for xxxx serial)
+            const owner = await tx.owner.findUnique({ where: { id: ownerId } });
+            if (!owner) throw new Error('Owner not found');
+            const ownerSerial = owner.serialNumber.toString().padStart(4, '0');
+
+            // 2. Get Building details (for zzz serial)
+            let building = await tx.building.findUnique({ where: { id: data.buildingId } });
+            if (!building) throw new Error('Building not found');
+
+            if (building.serialNumber === null) {
+                // Assign a serial if missing
+                const bCount = await tx.building.count({ where: { ownerId } });
+                building = await tx.building.update({
+                    where: { id: building.id },
+                    data: { serialNumber: bCount + 1 }
+                });
+            }
+            const bldgSerial = building.serialNumber!.toString().padStart(3, '0');
+
+            // 3. User Handling (for yyyyyy serial)
+            const resolvedEmail = data.email || `tenant_${data.phone}@staywise.com`;
+            let user = await tx.user.findUnique({ where: { email: resolvedEmail } });
+
+            if (!user) {
+                // Get next user serial for this owner
+                const maxUser = await tx.user.aggregate({
+                    where: { ownerId },
+                    _max: { serialNumber: true }
+                });
+                const nextUserSerial = (maxUser._max.serialNumber || 0) + 1;
+                const userSerialStr = nextUserSerial.toString().padStart(6, '0');
+
+                const customTenantId = `0000${ownerSerial}${bldgSerial}${userSerialStr}`;
+                const hashedPassword = await bcrypt.hash('StayWise123!', 10);
+
+                user = await tx.user.create({
+                    data: {
+                        name: data.name,
+                        email: resolvedEmail,
+                        phone: data.phone,
+                        password: hashedPassword,
+                        role: 'TENANT',
+                        ownerId,
+                        serialNumber: nextUserSerial,
+                        customTenantId
+                    }
+                });
+            }
+
+            // 4. Validate Bed/Room availability
+            if (data.bedId) {
+                const bed = await tx.bed.findUnique({ where: { id: data.bedId } });
+                if (!bed || bed.status === 'OCCUPIED') throw new Error('Bed is not available');
+                await tx.bed.update({ where: { id: data.bedId }, data: { status: 'OCCUPIED' } });
+            }
+
+            // 5. Create Assignment
+            const assignment = await tx.tenantAssignment.create({
+                data: {
+                    ownerId,
+                    tenantId: user.id,
+                    bedId: data.bedId,
+                    roomId: data.roomId,
+                    assignedBuildingId: data.buildingId,
+                    startDate: new Date(data.startDate),
+                    monthlyRent: data.monthlyRent,
+                    deposit: data.deposit
+                },
+                include: { tenant: true, bed: { include: { room: { include: { building: true } } } } }
+            });
+
+            // 6. Create Notification
+            await tx.notification.create({
+                data: {
+                    userId: user.id,
+                    title: 'Welcome to StayWise',
+                    message: `You have been added to ${building.name}. Your ID is ${user.customTenantId}.`
+                }
+            });
+
+            return assignment;
+        });
+
+        // 7. Mock WhatsApp Message
+        console.log(`[WhatsApp] Sent to ${data.phone}: "Welcome ${data.name}! You are added to StayWise. Tenant ID: ${result.tenant.customTenantId}"`);
+
+        res.status(201).json(result);
+    } catch (error: any) {
+        if (error instanceof z.ZodError) return res.status(400).json({ error: (error as any).errors });
+        console.error(error);
+        res.status(400).json({ error: error.message || 'Failed to add and assign tenant' });
     }
 };

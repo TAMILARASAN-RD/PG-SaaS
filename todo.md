@@ -171,3 +171,9 @@
 
 ## [x] PHASE 25 — NAVIGATION FIXES
 - [x] Fix the "Manage Structure" button on Property Cards to route correctly to the builder.
+
+## [x] PHASE 26 — ADD TENANT & WHATSAPP INTEGRATION
+- [x] Update database schema for serial fields (`serialNumber`) and `customTenantId`.
+- [x] Create `/tenants/add-assign` backend endpoint to generate `0000xxxxzzzyyyyyy` ID.
+- [x] Implement backend `Notification` creation.
+- [x] Build `AddTenantModal` in the frontend `/owner/tenants/page.tsx` that captures Email, WhatsApp, and Name.

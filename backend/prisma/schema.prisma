@@ -41,6 +41,7 @@ enum PaymentStatus {
 
 model Owner {
   id        String   @id @default(uuid())
+  serialNumber Int   @unique @default(autoincrement())
   name      String
   email     String   @unique
   phone     String?
@@ -63,14 +64,19 @@ model User {
   
   name      String
   email     String   @unique
+  phone     String?
   password  String
   role      Role     @default(TENANT)
+  
+  serialNumber Int?
+  customTenantId String? @unique
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
   tenantAssignments TenantAssignment[]
   complaints        Complaint[]
+  notifications     Notification[]
 }
 
 model Building {
@@ -81,6 +87,7 @@ model Building {
   name      String
   address   String?
   type      PropertyType @default(PG)
+  serialNumber Int?
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -200,4 +207,16 @@ model Complaint {
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
 }
