@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features | StayWise</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Project Styles -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <i data-lucide="building-2" style="color: white; width: 24px; height: 24px;"></i>
+                </div>
+                <span>StayWise</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="features.html" class="nav-link active">Features</a></li>
+                <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <a href="auth/login.html" class="nav-link">Log in</a>
+                <a href="auth/signup.html" class="btn btn-primary">Start as Owner</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="section-padding" style="margin-top: 4.5rem;">
+        <div class="container">
+            <div class="section-header">
+                <h1>Powerful Features for Growth</h1>
+                <p>Everything you need to manage your properties, from lead generation to rent collection.</p>
+            </div>
+
+            <div class="grid-3">
+                <!-- Feature 1 -->
+                <div class="card">
+                    <div class="card-icon bg-blue"><i data-lucide="layout"></i></div>
+                    <h3>Unified Dashboard</h3>
+                    <p>Get a bird's eye view of all your properties, occupancy rates, and pending payments in one place.
+                    </p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="card">
+                    <div class="card-icon bg-green"><i data-lucide="zap"></i></div>
+                    <h3>Automated SMS/Email</h3>
+                    <p>Send automated rent reminders and payment confirmations directly to your tenants via WhatsApp and
+                        Email.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="card">
+                    <div class="card-icon bg-orange"><i data-lucide="file-text"></i></div>
+                    <h3>PDF Receipts</h3>
+                    <p>Generate professional rent receipts and lease agreements instantly with one click.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 StayWise MVP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>

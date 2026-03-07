@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayWise | Intelligent Property Management</title>
+    <meta name="description"
+        content="Automate rent collection, track room availability, and handle tenant complaints effortlessly for your SG/PG properties.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons (via CDN for simplicity, or SVG) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Project Styles -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/staywise-imported.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <i data-lucide="building-2" style="color: white; width: 24px; height: 24px;"></i>
+                </div>
+                <span>StayWise</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="features.html" class="nav-link">Features</a></li>
+                <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <a href="auth/login.html" class="nav-link">Log in</a>
+                <a href="auth/signup.html" class="btn btn-primary">Start as Owner</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero section-padding">
+        <canvas id="bg-canvas" class="hero-canvas"></canvas>
+        <div class="hero-overlay"></div>
+
+        <div class="container relative">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    The intelligent way to manage your <span class="text-blue">properties & tenants</span>
+                </h1>
+                <p class="hero-description">
+                    StayWise is the all-in-one SaaS platform built for modern SG/PG owners. Automate rent collection,
+                    track room availability, and handle tenant complaints effortlessly.
+                </p>
+                <div class="hero-cta">
+                    <a href="auth/signup.html" class="btn btn-primary btn-lg">
+                        Get Started as Owner
+                        <i data-lucide="arrow-right"></i>
+                    </a>
+                    <a href="auth/signup-tenant.html" class="btn btn-secondary btn-lg">I'm a Tenant</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="staywise-wrapper">
+
+        <!-- B) Hero section -->
+        <section class="section">
+            <div class="container grid grid-2 items-center">
+                <div class="flex-col">
+                    <h1 class="hero-title" style="font-size: 3.5rem; margin-bottom: 24px;">Operational Control for
+                        Rental Spaces</h1>
+                    <p class="hero-subtitle"
+                        style="font-size: 1.25rem; color: var(--muted); margin-bottom: 32px; max-width: 520px;">Track
+                        occupancy, rent, and deposits across PG, residential, office and commercial assets from a single
+                        dashboard.</p>
+                    <ul class="hero-bullets" style="list-style: none; margin-bottom: 40px;">
+                        <li style="display: flex; align-items: center; margin-bottom: 16px; font-weight: 500;">
+                            <span style="color: var(--primary); margin-right: 12px; font-weight: bold;">✓</span>
+                            Real-time occupancy tracking
+                        </li>
+                        <li style="display: flex; align-items: center; margin-bottom: 16px; font-weight: 500;">
+                            <span style="color: var(--primary); margin-right: 12px; font-weight: bold;">✓</span> Rent &
+                            deposit clarity
+                        </li>
+                        <li style="display: flex; align-items: center; margin-bottom: 16px; font-weight: 500;">
+                            <span style="color: var(--primary); margin-right: 12px; font-weight: bold;">✓</span> Simple
+                            workflows for operators
+                        </li>
+                    </ul>
+                    <div class="flex gap-4">
+                        <a href="pages/pricing.html" class="btn btn-primary btn-lg">Start Free Trial</a>
+                        <a href="pages/contact.html" class="btn btn-secondary btn-lg">Request Demo</a>
+                    </div>
+                </div>
+                <div>
+                    <!-- Dashboard Preview Widget -->
+                    <div class="dashboard-mockup"
+                        style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-lg);">
+                        <div class="grid grid-3 mb-6" style="gap: 16px;">
+                            <div
+                                style="background: var(--bg); padding: 16px; border-radius: var(--radius); border: 1px solid var(--border);">
+                                <div
+                                    style="font-size: 0.75rem; color: var(--muted); font-weight: 700; text-transform: uppercase;">
+                                    Occupancy %</div>
+                                <div style="font-size: 1.5rem; font-weight: 800; color: var(--text);">92%</div>
+                            </div>
+                            <div
+                                style="background: var(--bg); padding: 16px; border-radius: var(--radius); border: 1px solid var(--border);">
+                                <div
+                                    style="font-size: 0.75rem; color: var(--muted); font-weight: 700; text-transform: uppercase;">
+                                    Collected Rent</div>
+                                <div style="font-size: 1.5rem; font-weight: 800; color: var(--text);">₹4.2L</div>
+                            </div>
+                            <div
+                                style="background: var(--bg); padding: 16px; border-radius: var(--radius); border: 1px solid var(--border);">
+                                <div
+                                    style="font-size: 0.75rem; color: var(--muted); font-weight: 700; text-transform: uppercase;">
+                                    Overdue</div>
+                                <div style="font-size: 1.5rem; font-weight: 800; color: #d97706;">₹35k</div>
+                            </div>
+                        </div>
+                        <!-- Graph Placeholder -->
+                        <div
+                            style="height: 180px; background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 24px; display: flex; align-items: flex-end; padding: 24px; gap: 12px;">
+                            <div
+                                style="flex: 1; background: linear-gradient(to top, var(--primary), var(--c-300)); border-radius: 4px 4px 0 0; height: 40%; transition: height 1s;">
+                            </div>
+                            <div
+                                style="flex: 1; background: linear-gradient(to top, var(--primary), var(--c-300)); border-radius: 4px 4px 0 0; height: 60%; transition: height 1s;">
+                            </div>
+                            <div
+                                style="flex: 1; background: linear-gradient(to top, var(--primary), var(--c-300)); border-radius: 4px 4px 0 0; height: 80%; transition: height 1s;">
+                            </div>
+                            <div
+                                style="flex: 1; background: linear-gradient(to top, var(--primary), var(--c-300)); border-radius: 4px 4px 0 0; height: 100%; transition: height 1s;">
+                            </div>
+                            <div
+                                style="flex: 1; background: linear-gradient(to top, var(--primary), var(--c-300)); border-radius: 4px 4px 0 0; height: 90%; transition: height 1s;">
+                            </div>
+                        </div>
+                        <!-- Table Placeholder -->
+                        <div style="border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;">
+                            <div
+                                style="display: grid; grid-template-columns: 2fr 1fr 1fr; background: var(--bg); padding: 12px 16px; font-size: 0.75rem; font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--border); text-transform: uppercase;">
+                                <span>Tenant</span><span>Unit</span><span>Status</span>
+                            </div>
+                            <div
+                                style="display: grid; grid-template-columns: 2fr 1fr 1fr; padding: 12px 16px; font-size: 0.875rem; border-bottom: 1px solid var(--border); align-items: center; color: var(--text);">
+                                <span style="font-weight: 500;">Amit K.</span><span>101-A</span><span
+                                    class="status-badge success">Paid</span>
+                            </div>
+                            <div
+                                style="display: grid; grid-template-columns: 2fr 1fr 1fr; padding: 12px 16px; font-size: 0.875rem; align-items: center; color: var(--text);">
+                                <span style="font-weight: 500;">Priya S.</span><span>204-B</span><span
+                                    class="status-badge warning">Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- C) Problem Statement -->
+        <section class="section bg-surface">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-title">Why rental operators lose money</h2>
+                    <p class="section-subtitle mb-12">The traditional way of managing properties creates leaks in
+                        revenue and endless disputes.</p>
+                </div>
+                <div class="grid">
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="card text-center items-center">
+                            <div class="feature-icon" style="font-size:2rem">📋</div>
+                            <h3 class="mb-2">Fragmented tracking</h3>
+                            <p class="text-muted">Excel + WhatsApp + paper makes reconciling financials nearly
+                                impossible.</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="card text-center items-center">
+                            <div class="feature-icon" style="font-size:2rem">🛏️</div>
+                            <h3 class="mb-2">No real-time occupancy clarity</h3>
+                            <p class="text-muted">Empty beds cost money. You can't optimize what you can't accurately
+                                track.</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="card text-center items-center">
+                            <div class="feature-icon" style="font-size:2rem">💳</div>
+                            <h3 class="mb-2">Overdue & deposit disputes</h3>
+                            <p class="text-muted">Without a clear ledger, collecting rent and settling deposits turns
+                                into conflict.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- D) How It Works -->
+        <section class="section">
+            <div class="container text-center">
+                <h2 class="section-title">How StayWise works</h2>
+                <p class="section-subtitle mb-12">Three simple steps to digitize your entire rental operation.</p>
+
+                <div class="grid">
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="card items-center text-center">
+                            <div class="step-number">1</div>
+                            <h3 class="mb-2">Add assets</h3>
+                            <p class="text-muted">Setup your PG, house, office, or shop. Customize structure and layout
+                                instantly.</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="card items-center text-center">
+                            <div class="step-number">2</div>
+                            <h3 class="mb-2">Create units</h3>
+                            <p class="text-muted">Define beds, rooms, or seats. Set individual pricing, configurations,
+                                and availability.</p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="card items-center text-center">
+                            <div class="step-number">3</div>
+                            <h3 class="mb-2">Track rent, deposits, occupancy</h3>
+                            <p class="text-muted">Monitor incoming rent, handle deposits securely, and maintain live
+                                occupancy maps.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- E) Features Overview -->
+        <section id="features" class="section bg-alt">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Everything you need</h2>
+                    <p class="section-subtitle">A complete operating system for your rental business.</p>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="card"
+                        style="padding: 32px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s;">
+                        <div
+                            style="width: 48px; height: 48px; border-radius: 12px; background: var(--bg); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; font-size: 1.5rem; color: var(--primary);">
+                            🏢</div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px;">Units & Occupancy</h3>
+                        <p style="color: var(--muted); line-height: 1.5;">Live dashboard showing vacant, occupied, and
+                            notice-period units.</p>
+                    </div>
+                    <div class="card"
+                        style="padding: 32px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s;">
+                        <div
+                            style="width: 48px; height: 48px; border-radius: 12px; background: var(--bg); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; font-size: 1.5rem; color: var(--primary);">
+                            👤</div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px;">Tenant Lifecycle</h3>
+                        <p style="color: var(--muted); line-height: 1.5;">From KYC onboarding to auto-generated digital
+                            exit settlements.</p>
+                    </div>
+                    <div class="card"
+                        style="padding: 32px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s;">
+                        <div
+                            style="width: 48px; height: 48px; border-radius: 12px; background: var(--bg); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; font-size: 1.5rem; color: var(--primary);">
+                            💸</div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px;">Rent & Deposits</h3>
+                        <p style="color: var(--muted); line-height: 1.5;">Automated reminders, receipt generation, and
+                            clear deposit ledgers.</p>
+                    </div>
+                    <div class="card"
+                        style="padding: 32px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s;">
+                        <div
+                            style="width: 48px; height: 48px; border-radius: 12px; background: var(--bg); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; font-size: 1.5rem; color: var(--primary);">
+                            🔧</div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px;">Complaints & Requests
+                        </h3>
+                        <p style="color: var(--muted); line-height: 1.5;">Centralized ticketing system for tenant
+                            maintenance and requests.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- F) Screenshots Gallery -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title text-center">Built for clarity</h2>
+                <p class="section-subtitle text-center mb-12">See exactly what's happening across all your properties at
+                    a glance.</p>
+
+                <div class="grid">
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="gallery-card">
+                            <div class="gallery-placeholder">
+                                <img src="images/occupancy.png" alt="Occupancy Grid Map">
+                            </div>
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Live Occupancy</h3>
+                                <p class="gallery-desc">Visual mapping of vacant and occupied units.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="gallery-card">
+                            <div class="gallery-placeholder">
+                                <img src="images/ledger.png" alt="Detailed Rent Ledger">
+                            </div>
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Clear Ledgers</h3>
+                                <p class="gallery-desc">Track every payment, due, and deposit effortlessly.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="gallery-card">
+                            <div class="gallery-placeholder">
+                                <img src="images/reports.png" alt="Business Reports">
+                            </div>
+                            <div class="gallery-content">
+                                <h3 class="gallery-title">Actionable Reports</h3>
+                                <p class="gallery-desc">Understand revenue and trends in one unified dashboard.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- G) Testimonials -->
+        <section class="section bg-surface">
+            <div class="container">
+                <h2 class="section-title text-center">Trusted by operators</h2>
+                <p class="section-subtitle text-center mb-12">Hear from the people running properties efficiently.</p>
+
+                <div class="grid">
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="card">
+                            <p class="testimonial-quote">"Since moving to StayWise, our rent collection disputes dropped
+                                to zero. The ledger is perfectly transparent."</p>
+                            <div>
+                                <p class="testimonial-author">Rahul Verma</p>
+                                <p class="testimonial-role">PG Owner, Bangalore</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="card">
+                            <p class="testimonial-quote">"I can manage three different commercial properties from my
+                                phone without calling the staff constantly."</p>
+                            <div>
+                                <p class="testimonial-author">Sneha Patel</p>
+                                <p class="testimonial-role">Property Manager, Pune</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="card">
+                            <p class="testimonial-quote">"The onboarding process was seamless, and I can download my
+                                payment receipts anytime I want without hassle."</p>
+                            <div>
+                                <p class="testimonial-author">Aditya Sharma</p>
+                                <p class="testimonial-role">Resident Tenant</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- H) Pricing Snapshot -->
+        <section id="pricing" class="section">
+            <div class="container">
+                <h2 class="section-title text-center">Simple subscription pricing</h2>
+                <p class="section-subtitle text-center mb-12">Pricing per total units + add-ons. Clear, transparent, and
+                    scalable.</p>
+
+                <div class="grid" style="align-items: center;">
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="card">
+                            <h3 class="mb-2">Starter</h3>
+                            <p class="text-muted">Best for single property owners.</p>
+                            <div class="pricing-price">₹499<span
+                                    style="font-size:1rem;font-weight:500;color:var(--muted)">/mo</span></div>
+                            <ul class="pricing-features">
+                                <li>Up to 20 units</li>
+                                <li>Basic ledger & occupancy</li>
+                                <li>1 Admin User</li>
+                                <li>Email Support</li>
+                            </ul>
+                            <a href="pages/pricing.html" class="btn btn-secondary w-full justify-center">View
+                                Pricing</a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="card"
+                            style="border-color: var(--primary); box-shadow: var(--shadow-lg); transform: scale(1.05); z-index: 10;">
+                            <div class="badge mb-4" style="align-self: flex-start">Most Popular</div>
+                            <h3 class="mb-2">Growth</h3>
+                            <p class="text-muted">Best for standard multi-property operators.</p>
+                            <div class="pricing-price">₹1499<span
+                                    style="font-size:1rem;font-weight:500;color:var(--muted)">/mo</span></div>
+                            <ul class="pricing-features">
+                                <li>Up to 100 units</li>
+                                <li>Advanced reporting</li>
+                                <li>5 Manager accounts</li>
+                                <li>Automated Reminders</li>
+                            </ul>
+                            <a href="pages/pricing.html" class="btn btn-primary w-full justify-center">View Pricing</a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-4">
+                        <div class="card">
+                            <h3 class="mb-2">Pro</h3>
+                            <p class="text-muted">Best for large scale commercial operations.</p>
+                            <div class="pricing-price">Custom</div>
+                            <ul class="pricing-features">
+                                <li>Unlimited units</li>
+                                <li>API & integrations</li>
+                                <li>Unlimited roles/access</li>
+                                <li>Priority 24/7 Support</li>
+                            </ul>
+                            <a href="pages/contact.html" class="btn btn-secondary w-full justify-center">Contact
+                                Sales</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- I) Security & Data Protection -->
+        <section class="section bg-surface">
+            <div class="container text-center">
+                <h2 class="section-title">Enterprise-grade Security</h2>
+                <p class="section-subtitle mb-8">Your data and your tenants' data is protected by best-in-class security
+                    measures.</p>
+                <ul class="security-list text-left">
+                    <li>Encrypted document storage (KYC)</li>
+                    <li>Role-based access control</li>
+                    <li>Audit logs for edits</li>
+                    <li>Multi-tenant isolation</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- J) FAQ -->
+        <section class="section">
+            <div class="container" style="max-width: 800px;">
+                <h2 class="section-title text-center mb-8">Frequently Asked Questions</h2>
+
+                <details class="faq-details">
+                    <summary class="faq-summary">Is StayWise only for PGs?</summary>
+                    <p>No, StayWise is incredibly flexible. You can manage PGs, residential apartments, commercial
+                        offices, and shops all from the same dashboard effortlessly.</p>
+                </details>
+
+                <details class="faq-details">
+                    <summary class="faq-summary">Can I manage multiple properties?</summary>
+                    <p>Yes! With our Growth and Pro plans, you can manage multiple properties and switch between them
+                        seamlessly within a single account.</p>
+                </details>
+
+                <details class="faq-details">
+                    <summary class="faq-summary">Do you support cash + UPI tracking?</summary>
+                    <p>Absolutely. You can log payments via cash, UPI, bank transfer, or cheque. The ledger maintains a
+                        crystal-clear history of all transaction types.</p>
+                </details>
+
+                <details class="faq-details">
+                    <summary class="faq-summary">Can managers have limited access?</summary>
+                    <p>Yes. StayWise features role-based access control. You can grant property managers access to only
+                        specific properties, and restrict their ability to edit past settled ledgers.</p>
+                </details>
+
+                <details class="faq-details">
+                    <summary class="faq-summary">Is this invite-only now?</summary>
+                    <p>StayWise is currently operating as an invite-only MVP to ensure high-quality onboarding. You can
+                        request a demo and join our waitlist for instant priority access.</p>
+                </details>
+            </div>
+        </section>
+
+        <!-- K) Final CTA banner -->
+        <section class="section">
+            <div class="container">
+                <div class="cta-banner">
+                    <h2 class="section-title">Get control of occupancy and collections.</h2>
+                    <p class="mb-8" style="color: var(--c-100); font-size: 1.125rem; font-weight: 500;">We’ll onboard
+                        your first property with you.</p>
+                    <div class="flex gap-4 justify-center flex-wrap">
+                        <a href="pages/pricing.html" class="btn btn-lg"
+                            style="background: white; color: var(--primary);">Start Free Trial</a>
+                        <a href="pages/contact.html" class="btn btn-lg"
+                            style="background: transparent; border-color: white; color: white;">Request Demo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 StayWise MVP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/background-sequence.js"></script>
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

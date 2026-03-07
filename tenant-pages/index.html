@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenant Dashboard | StayWise</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <style>
+        /* ─── Notification Bell ──────────────────────── */
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+
+        .notification-bell .bell-count {
+            position: absolute;
+            top: -4px;
+            right: -6px;
+            background: var(--error);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ─── Notification Panel ─────────────────────── */
+        .notification-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            max-width: 90vw;
+            height: 100vh;
+            background: white;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.12);
+            z-index: 1000;
+            flex-direction: column;
+            animation: slideIn 0.25s ease;
+        }
+
+        .notification-panel.open {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .notification-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .notification-panel-header h3 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .notification-panel-close {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .notification-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .notification-item {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.25rem;
+            border-left: 3px solid var(--primary);
+            background: var(--background);
+            transition: background 0.15s;
+        }
+
+        .notification-item.unread {
+            background: #eff6ff;
+            border-left-color: var(--primary);
+        }
+
+        .notification-item .notif-message {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+
+        .notification-item .notif-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .notification-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+        }
+
+        /* ─── Notification Overlay ───────────────────── */
+        .notification-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 999;
+        }
+
+        .notification-overlay.open {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="dashboard-page">
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" class="logo">
+                    <div class="logo-icon">
+                        <i data-lucide="building-2" style="color: white; width: 24px; height: 24px;"></i>
+                    </div>
+                    <span>StayWise</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="../tenant-pages/index.html" class="sidebar-link active">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>My Rent</span>
+                </a>
+                <a href="../tenant-pages/complaints.html" class="sidebar-link">
+                    <i data-lucide="message-square"></i>
+                    <span>Support/Complaints</span>
+                </a>
+                <a href="../tenant-pages/profile.html" class="sidebar-link">
+                    <i data-lucide="user"></i>
+                    <span>My Profile</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="../auth/login.html" class="sidebar-link" id="logout-link">
+                    <i data-lucide="log-out"></i>
+                    <span>Log Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="dashboard-header">
+                <div class="header-search">
+                    <h2 class="page-title" id="welcome-title">Welcome</h2>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <!-- Notification Bell -->
+                    <div class="notification-bell" id="notification-bell" title="Notifications">
+                        <i data-lucide="bell" style="width:20px;height:20px;"></i>
+                        <span class="bell-count" id="bell-count" style="display:none;">0</span>
+                    </div>
+
+                    <div id="header-kyc-status"></div>
+
+                    <div class="profile-dropdown">
+                        <div class="user-profile">
+                            <span id="user-display-name">User</span>
+                            <div class="avatar" id="user-avatar" style="background: var(--accent-indigo);">U</div>
+                        </div>
+                        <div class="profile-dropdown-menu">
+                            <div
+                                style="padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--border); margin-bottom: var(--space-2);">
+                                <p id="dropdown-name"
+                                    style="font-weight: 600; font-size: var(--text-sm); line-height: 1.2;"></p>
+                                <p id="dropdown-email" style="color: var(--text-muted); font-size: var(--text-xs);"></p>
+                            </div>
+                            <a href="../tenant-pages/profile.html" class="dropdown-item">
+                                <i data-lucide="user"></i> My Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../auth/login.html" class="dropdown-item text-error">
+                                <i data-lucide="log-out"></i> Log Out
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- KYC Warning Banner -->
+                <div id="kyc-warning-banner"></div>
+
+                <!-- Stats Grid -->
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <p class="stat-label">Current Rent Status</p>
+                        <h3 class="stat-value">--</h3>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-label">Due Date</p>
+                        <h3 class="stat-value">--</h3>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-label">Registered Property</p>
+                        <h3 class="stat-value" style="font-size: 1.1rem;" id="registered-property">--</h3>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-label">Active Complaints</p>
+                        <h3 class="stat-value">0</h3>
+                    </div>
+                </div>
+
+                <!-- Rent History -->
+                <div class="table-card">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3>Rent Payment History</h3>
+                        <button class="btn btn-primary" style="padding: 0.5rem 1rem;">Download Receipt</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Payment Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5"
+                                        style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                                        No rent history available.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Overlay -->
+    <div class="notification-overlay" id="notification-overlay"></div>
+
+    <!-- Notification Side Panel -->
+    <div class="notification-panel" id="notification-panel">
+        <div class="notification-panel-header">
+            <h3>🔔 Notifications</h3>
+            <button class="notification-panel-close" id="close-notifications">&times;</button>
+        </div>
+        <div class="notification-list" id="notification-list">
+            <!-- Notifications injected by JS -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/dashboard.js"></script>
+    <script>
+        lucide.createIcons();
+
+        // ─── Load user session & populate UI ────────────
+        (function initTenantDashboard() {
+            const userJson = localStorage.getItem('staywise_user');
+            let user = null;
+
+            if (userJson) {
+                try { user = JSON.parse(userJson); } catch (e) { }
+            }
+
+            // Fallback for demo / if no login happened
+            if (!user) {
+                user = { email: 'demo@staywise.com', name: 'Demo User', role: 'tenant' };
+            }
+
+            const firstName = user.name.split(' ')[0];
+
+            // Header & dropdown
+            document.getElementById('welcome-title').textContent = `Welcome, ${firstName}`;
+            document.getElementById('user-display-name').textContent = user.name;
+            document.getElementById('user-avatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('dropdown-name').textContent = user.name;
+            document.getElementById('dropdown-email').textContent = user.email;
+
+            // Updated KYC UI
+            renderKYCStatus(user.kycStatus);
+
+            // Load notifications for this user
+            loadNotifications(user.email);
+
+            // Check if there's an assignment notification to fill the property card
+            const storageKey = `staywise_notifications_${user.email}`;
+            const notifications = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            const assignNotif = notifications.find(n => n.type === 'assignment');
+            if (assignNotif) {
+                // Parse building & room from the message
+                const propEl = document.getElementById('registered-property');
+                // Extract the essential info from the notification message
+                const match = assignNotif.message.match(/assigned with (.+?), (.+?), Room (.+?), Bed/);
+                if (match) {
+                    propEl.textContent = `${match[1]} - ${match[3]}`;
+                }
+            } else {
+                document.getElementById('registered-property').textContent = 'Not assigned yet';
+            }
+        })();
+
+        function renderKYCStatus(status) {
+            const headerStatus = document.getElementById('header-kyc-status');
+            const warningBanner = document.getElementById('kyc-warning-banner');
+
+            if (status === 'Verified') {
+                headerStatus.innerHTML = `<span class="badge success" style="margin-right: 1rem;"><i data-lucide="check-circle" style="width:14px;height:14px;margin-right:6px;"></i> KYC Verified</span>`;
+                warningBanner.innerHTML = '';
+            } else {
+                headerStatus.innerHTML = `<span class="badge warning" style="margin-right: 1rem;"><i data-lucide="alert-circle" style="width:14px;height:14px;margin-right:6px;"></i> KYC Pending</span>`;
+                warningBanner.innerHTML = `
+                    <div class="alert warning" style="margin-bottom: var(--space-4); display: flex; align-items: center; justify-content: space-between; background: #fffbeb; border: 1px solid #fef3c7; padding: 1rem; border-radius: var(--radius-md);">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <i data-lucide="shield-alert" style="color: #d97706;"></i>
+                            <div>
+                                <p style="font-weight: 600; color: #92400e;">KYC Verification Pending</p>
+                                <p style="font-size: 0.85rem; color: #b45309; opacity: 0.9;">Please complete your KYC to unlock all features and avoid registration issues.</p>
+                            </div>
+                        </div>
+                        <a href="../tenant-pages/profile.html?tab=kyc" class="btn btn-primary btn-sm">Complete KYC</a>
+                    </div>
+                `;
+            }
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        // ─── Notification Bell & Panel ──────────────────
+        function loadNotifications(email) {
+            const storageKey = `staywise_notifications_${email}`;
+            const notifications = JSON.parse(localStorage.getItem(storageKey) || '[]');
+
+            const bellCount = document.getElementById('bell-count');
+            const unreadCount = notifications.filter(n => !n.read).length;
+
+            if (unreadCount > 0) {
+                bellCount.style.display = 'flex';
+                bellCount.textContent = unreadCount > 9 ? '9+' : unreadCount;
+            } else {
+                bellCount.style.display = 'none';
+            }
+
+            // Bell click → open panel
+            document.getElementById('notification-bell').addEventListener('click', () => {
+                openNotificationPanel(email);
+            });
+
+            document.getElementById('close-notifications').addEventListener('click', closeNotificationPanel);
+            document.getElementById('notification-overlay').addEventListener('click', closeNotificationPanel);
+        }
+
+        function openNotificationPanel(email) {
+            const storageKey = `staywise_notifications_${email}`;
+            const notifications = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            const listEl = document.getElementById('notification-list');
+
+            if (notifications.length === 0) {
+                listEl.innerHTML = `
+                    <div class="notification-empty">
+                        <i data-lucide="bell-off" style="width:36px;height:36px;margin-bottom:0.75rem;opacity:0.3;"></i>
+                        <p>No notifications yet.</p>
+                    </div>
+                `;
+            } else {
+                listEl.innerHTML = notifications.map(n => {
+                    const timeAgo = getTimeAgo(n.timestamp);
+                    return `
+                        <div class="notification-item ${n.read ? '' : 'unread'}">
+                            <div class="notif-message">${n.message}</div>
+                            <div class="notif-time">${timeAgo}</div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Mark all as read
+                notifications.forEach(n => n.read = true);
+                localStorage.setItem(storageKey, JSON.stringify(notifications));
+
+                // Update badge
+                document.getElementById('bell-count').style.display = 'none';
+            }
+
+            document.getElementById('notification-panel').classList.add('open');
+            document.getElementById('notification-overlay').classList.add('open');
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function closeNotificationPanel() {
+            document.getElementById('notification-panel').classList.remove('open');
+            document.getElementById('notification-overlay').classList.remove('open');
+        }
+
+        function getTimeAgo(isoTimestamp) {
+            const diff = Date.now() - new Date(isoTimestamp).getTime();
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return 'Just now';
+            if (mins < 60) return `${mins} min ago`;
+            const hrs = Math.floor(mins / 60);
+            if (hrs < 24) return `${hrs}h ago`;
+            const days = Math.floor(hrs / 24);
+            return `${days}d ago`;
+        }
+    </script>
+</body>
+
+</html>

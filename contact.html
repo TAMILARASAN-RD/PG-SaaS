@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | StayWise</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/auth.css"> <!-- Reuse form styles -->
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i data-lucide="building-2" style="color: white; width: 24px; height: 24px;"></i>
+                </div><span>StayWise</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="features.html" class="nav-link">Features</a></li>
+                <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link active">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <a href="auth/login.html" class="nav-link">Log in</a>
+                <a href="auth/signup.html" class="btn btn-primary">Start as Owner</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="section-padding" style="margin-top: 4.5rem;">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;">
+                <div>
+                    <div class="section-header" style="text-align: left; margin-bottom: var(--space-8);">
+                        <h1>Get in Touch</h1>
+                        <p>Have questions about our plans or need a custom solution? Our team is here to help.</p>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <div class="card-icon bg-blue"><i data-lucide="mail"></i></div>
+                            <div>
+                                <p style="font-weight: 600;">Email Us</p>
+                                <p style="color: var(--text-secondary);">support@staywise.com</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <div class="card-icon bg-green"><i data-lucide="phone"></i></div>
+                            <div>
+                                <p style="font-weight: 600;">Call Us</p>
+                                <p style="color: var(--text-secondary);">+91 98765 43210</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <form class="auth-form">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" placeholder="Your Name"
+                                style="width: 100%; padding: var(--space-3) var(--space-4); background: var(--surface-glass); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-primary); font-size: var(--text-sm); font-family: var(--font-sans);">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" placeholder="Email Address"
+                                style="width: 100%; padding: var(--space-3) var(--space-4); background: var(--surface-glass); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-primary); font-size: var(--text-sm); font-family: var(--font-sans);">
+                        </div>
+                        <div class="form-group">
+                            <label>Message</label>
+                            <textarea placeholder="How can we help?"
+                                style="width: 100%; height: 120px; background: var(--surface-glass); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); color: var(--text-primary); font-size: var(--text-sm); font-family: var(--font-sans); resize: none;"></textarea>
+                        </div>
+                        <button class="btn btn-primary w-full">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 StayWise MVP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>

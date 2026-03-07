@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Dashboard | StayWise</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+
+<body class="dashboard-page">
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" class="logo">
+                    <div class="logo-icon">
+                        <i data-lucide="building-2" style="color: white; width: 24px; height: 24px;"></i>
+                    </div>
+                    <span>StayWise</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="../owners-pages/index.html" class="sidebar-link active">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="../owners-pages/properties.html" class="sidebar-link">
+                    <i data-lucide="home"></i>
+                    <span>Properties</span>
+                </a>
+                <a href="../owners-pages/tenants.html" class="sidebar-link">
+                    <i data-lucide="users"></i>
+                    <span>Tenants</span>
+                </a>
+                <a href="../owners-pages/rent.html" class="sidebar-link">
+                    <i data-lucide="credit-card"></i>
+                    <span>Rent Management</span>
+                </a>
+                <a href="../owners-pages/complaints.html" class="sidebar-link">
+                    <i data-lucide="message-square"></i>
+                    <span>Complaints</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="../auth/login.html" class="sidebar-link">
+                    <i data-lucide="log-out"></i>
+                    <span>Log Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="dashboard-header">
+                <div class="header-search">
+                    <h2 class="page-title">Dashboard Overview</h2>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <!-- KYC Status -->
+                    <div id="header-kyc-status"></div>
+
+                    <div class="profile-dropdown">
+                        <div class="user-profile">
+                            <span id="header-user-name">Admin User</span>
+                            <div class="avatar" id="header-user-avatar">A</div>
+                        </div>
+                        <div class="profile-dropdown-menu">
+                            <div
+                                style="padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--border); margin-bottom: var(--space-2);">
+                                <p id="dropdown-user-name"
+                                    style="font-weight: 600; font-size: var(--text-sm); line-height: 1.2;"></p>
+                                <p id="dropdown-user-email"
+                                    style="color: var(--text-muted); font-size: var(--text-xs);"></p>
+                            </div>
+                            <a href="../owners-pages/profile.html" class="dropdown-item">
+                                <i data-lucide="user"></i> My Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../auth/login.html" class="dropdown-item text-error">
+                                <i data-lucide="log-out"></i> Log Out
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- Stats Grid -->
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <p class="stat-label">Total Properties</p>
+                        <h3 class="stat-value">0</h3>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-label">Total Tenants</p>
+                        <h3 class="stat-value">0</h3>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-label">Capacity</p>
+                        <h3 class="stat-value">0%</h3>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-label">Monthly Revenue</p>
+                        <h3 class="stat-value">₹0</h3>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Table -->
+                <div class="table-card">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3>Recent Rent Payments</h3>
+                        <a href="../owners-pages/rent.html" class="btn btn-secondary" style="padding: 0.5rem 1rem;">View
+                            All</a>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tenant</th>
+                                    <th>Property</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5"
+                                        style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                                        No recent rent payments.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/dashboard.js"></script>
+    <script>
+        lucide.createIcons();
+
+        // ─── Initialize Dashboard ───────────────────────
+        (function initOwnerDashboard() {
+            const userJson = localStorage.getItem('staywise_user');
+            if (!userJson) return;
+            const user = JSON.parse(userJson);
+
+            // Populate header/dropdown
+            document.getElementById('header-user-name').textContent = user.name;
+            document.getElementById('header-user-avatar').textContent = user.name.charAt(0).toUpperCase();
+            document.getElementById('dropdown-user-name').textContent = user.name;
+            document.getElementById('dropdown-user-email').textContent = user.email;
+
+            // Render KYC
+            const kycHeader = document.getElementById('header-kyc-status');
+            if (user.kycStatus === 'Verified') {
+                kycHeader.innerHTML = `<span class="badge success" style="margin-right: 1rem;"><i data-lucide="check-circle" style="width:14px;height:14px;margin-right:6px;"></i> Verified Owner</span>`;
+            } else {
+                kycHeader.innerHTML = `<span class="badge warning" style="margin-right: 1rem;"><i data-lucide="alert-circle" style="width:14px;height:14px;margin-right:6px;"></i> KYC Pending</span>`;
+            }
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        })();
+    </script>
+</body>
+
+</html>

@@ -33,8 +33,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (token && storedUser) {
             setUser(JSON.parse(storedUser));
         } else {
-            // If no token and not on login or register, kick out
-            if (pathname !== '/login' && pathname !== '/register') {
+            // If no token and not on an allowed public route, kick out
+            const publicRoutes = ['/login', '/register', '/forgot-password', '/reset-password'];
+            if (!publicRoutes.includes(pathname)) {
                 router.replace('/login');
             }
         }

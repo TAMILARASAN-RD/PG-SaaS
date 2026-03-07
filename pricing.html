@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing | StayWise</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">
+                    <i data-lucide="building-2" style="color: white; width: 24px; height: 24px;"></i>
+                </div>
+                <span>StayWise</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="features.html" class="nav-link">Features</a></li>
+                <li><a href="pricing.html" class="nav-link active">Pricing</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <a href="auth/login.html" class="nav-link">Log in</a>
+                <a href="auth/signup.html" class="btn btn-primary">Start for Free</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="section-padding" style="margin-top: 4.5rem;">
+        <div class="container">
+            <div class="section-header">
+                <h1>Simple, Transparent Pricing</h1>
+            </div>
+
+            <div class="grid-3" style="max-width: 1000px; margin: 0 auto; text-align: left;">
+                <!-- Basic -->
+                <div class="card">
+                    <h3 style="color: var(--brand-500);">Basic</h3>
+                    <div style="margin: 1.5rem 0;">
+                        <span style="font-size: 2.5rem; font-weight: 800;">Free</span>
+                    </div>
+                    <p style="margin-bottom: 2rem; color: var(--text-secondary);">For single property owners starting
+                        out.</p>
+                    <ul style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
+                            Up to 10 Tenants</li>
+                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
+                            Basic Reports</li>
+                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
+                            Email Support</li>
+                    </ul>
+                    <a href="auth/signup.html" class="btn btn-secondary w-full">Get Started</a>
+                </div>
+
+                <!-- Pro -->
+                <div class="card" style="border-color: var(--brand-500); transform: scale(1.05); position: relative;">
+                    <div
+                        style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--brand-600); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">
+                        MOST POPULAR</div>
+                    <h3 style="color: var(--brand-500);">Pro</h3>
+                    <div style="margin: 1.5rem 0;">
+                        <span style="font-size: 2.5rem; font-weight: 800;">₹999</span>
+                        <span style="color: var(--text-secondary);">/month</span>
+                    </div>
+                    <p style="margin-bottom: 2rem; color: var(--text-secondary);">For professional SG/PG businesses.</p>
+                    <ul style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
+                            Unlimited Tenants</li>
+                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
+                            WhatsApp Automation</li>
+                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
+                            Advanced Analytics</li>
+                    </ul>
+                    <a href="auth/signup.html" class="btn btn-primary w-full">Try Pro Free</a>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="card">
+                    <h3 style="color: var(--brand-500);">Enterprise</h3>
+                    <div style="margin: 1.5rem 0;">
+                        <span style="font-size: 2.5rem; font-weight: 800;">Custom</span>
+                    </div>
+                    <p style="margin-bottom: 2rem; color: var(--text-secondary);">For large property networks.</p>
+                    <ul style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
+                            Multi-property Management</li>
+                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
+                            Custom API Access</li>
+                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
+                            24/7 Priority Support</li>
+                    </ul>
+                    <a href="contact.html" class="btn btn-secondary w-full">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 StayWise MVP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>

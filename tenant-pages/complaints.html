@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenant Support | StayWise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+
+<body class="dashboard-page">
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" class="logo">
+                    <div class="logo-icon"><i data-lucide="building-2"
+                            style="color: white; width: 24px; height: 24px;"></i></div>
+                    <span>StayWise</span>
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="../tenant-pages/index.html" class="sidebar-link"><i data-lucide="layout-dashboard"></i><span>My Rent</span></a>
+                <a href="../tenant-pages/complaints.html" class="sidebar-link active"><i
+                        data-lucide="message-square"></i><span>Support/Complaints</span></a>
+                <a href="../tenant-pages/profile.html" class="sidebar-link"><i data-lucide="user"></i><span>My Profile</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../auth/login.html" class="sidebar-link"><i data-lucide="log-out"></i><span>Log
+                        Out</span></a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="dashboard-header">
+                <h2 class="page-title">Support Requests</h2>
+                <div class="header-actions" style="display: flex; align-items: center; gap: var(--space-4);">
+                    <button class="btn btn-primary">+ New Request</button>
+                    <div class="profile-dropdown">
+                        <div class="user-profile">
+                            <span>Rahul Sharma</span>
+                            <div class="avatar" style="background: var(--accent-indigo);">R</div>
+                        </div>
+                        <div class="profile-dropdown-menu">
+                            <div
+                                style="padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--border); margin-bottom: var(--space-2);">
+                                <p style="font-weight: 600; font-size: var(--text-sm); line-height: 1.2;">Rahul Sharma
+                                </p>
+                                <p style="color: var(--text-muted); font-size: var(--text-xs);">rahul@email.com</p>
+                            </div>
+                            <a href="../tenant-pages/profile.html" class="dropdown-item">
+                                <i data-lucide="user"></i> My Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../auth/login.html" class="dropdown-item text-error">
+                                <i data-lucide="log-out"></i> Log Out
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <div class="content-body">
+                <div class="card" style="text-align: center; padding: 4rem;">
+                    <i data-lucide="check-circle"
+                        style="width: 48px; height: 48px; color: var(--success); margin-bottom: 1rem;"></i>
+                    <h3>All caught up!</h3>
+                    <p>You have no active maintenance requests at the moment.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/dashboard.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>
+

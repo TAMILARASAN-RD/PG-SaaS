@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaints | StayWise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+
+<body class="dashboard-page">
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" class="logo">
+                    <div class="logo-icon"><i data-lucide="building-2"
+                            style="color: white; width: 24px; height: 24px;"></i></div>
+                    <span>StayWise</span>
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="../owners-pages/index.html" class="sidebar-link"><i
+                        data-lucide="layout-dashboard"></i><span>Overview</span></a>
+                <a href="../owners-pages/properties.html" class="sidebar-link"><i
+                        data-lucide="home"></i><span>Properties</span></a>
+                <a href="../owners-pages/tenants.html" class="sidebar-link"><i
+                        data-lucide="users"></i><span>Tenants</span></a>
+                <a href="../owners-pages/rent.html" class="sidebar-link"><i data-lucide="credit-card"></i><span>Rent
+                        Management</span></a>
+                <a href="../owners-pages/complaints.html" class="sidebar-link active"><i
+                        data-lucide="message-square"></i><span>Complaints</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../auth/login.html" class="sidebar-link"><i data-lucide="log-out"></i><span>Log
+                        Out</span></a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="dashboard-header">
+                <h2 class="page-title">Complaints</h2>
+                <div class="profile-dropdown">
+                    <div class="user-profile">
+                        <span>Admin User</span>
+                        <div class="avatar">A</div>
+                    </div>
+                    <div class="profile-dropdown-menu">
+                        <div
+                            style="padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--border); margin-bottom: var(--space-2);">
+                            <p style="font-weight: 600; font-size: var(--text-sm); line-height: 1.2;">Admin User</p>
+                            <p style="color: var(--text-muted); font-size: var(--text-xs);">owner@staywise.com</p>
+                        </div>
+                        <a href="../owners-pages/index.html" class="dropdown-item">
+                            <i data-lucide="layout-dashboard"></i> Dashboard Overview
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="../auth/login.html" class="dropdown-item text-error">
+                            <i data-lucide="log-out"></i> Log Out
+                        </a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tenant</th>
+                                <th>Property</th>
+                                <th>Issue</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                                    No complaints recorded.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/dashboard.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>

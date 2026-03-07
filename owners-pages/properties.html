@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Properties | StayWise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+
+<body class="dashboard-page">
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" class="logo">
+                    <div class="logo-icon"><i data-lucide="building-2"
+                            style="color: white; width: 24px; height: 24px;"></i></div><span>StayWise</span>
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="../owners-pages/index.html" class="sidebar-link">
+                    <i data-lucide="layout-dashboard"></i><span>Overview</span>
+                </a>
+                <a href="../owners-pages/properties.html" class="sidebar-link active">
+                    <i data-lucide="home"></i><span>Properties</span>
+                </a>
+                <a href="../owners-pages/tenants.html" class="sidebar-link">
+                    <i data-lucide="users"></i><span>Tenants</span>
+                </a>
+                <a href="../owners-pages/rent.html" class="sidebar-link">
+                    <i data-lucide="credit-card"></i><span>Rent Management</span>
+                </a>
+                <a href="../owners-pages/complaints.html" class="sidebar-link">
+                    <i data-lucide="message-square"></i><span>Complaints</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../auth/login.html" class="sidebar-link"><i data-lucide="log-out"></i><span>Log
+                        Out</span></a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="dashboard-header">
+                <h2 class="page-title">My Properties</h2>
+                <div class="header-actions" style="display: flex; align-items: center; gap: var(--space-4);">
+                    <button class="btn btn-primary" id="btn-add-property">+ Add Property</button>
+                    <div class="profile-dropdown">
+                        <div class="user-profile">
+                            <span>Admin User</span>
+                            <div class="avatar">A</div>
+                        </div>
+                        <div class="profile-dropdown-menu">
+                            <div
+                                style="padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--border); margin-bottom: var(--space-2);">
+                                <p style="font-weight: 600; font-size: var(--text-sm); line-height: 1.2;">Admin User</p>
+                                <p style="color: var(--text-muted); font-size: var(--text-xs);">owner@staywise.com</p>
+                            </div>
+                            <a href="../owners-pages/index.html" class="dropdown-item">
+                                <i data-lucide="layout-dashboard"></i> Dashboard Overview
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="../auth/login.html" class="dropdown-item text-error">
+                                <i data-lucide="log-out"></i> Log Out
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <div class="grid-3" id="properties-grid">
+                    <!-- Properties will be injected here via JS later -->
+                </div>
+                <!-- Empty State -->
+                <div id="empty-state"
+                    style="text-align: center; padding: 4rem 2rem; border: 1px dashed var(--border); border-radius: var(--radius-md); background: var(--background); display: none;">
+                    <i data-lucide="building"
+                        style="width:48px;height:48px;color:var(--text-muted);margin-bottom:1rem;opacity:0.5;"></i>
+                    <h3 style="margin-bottom:0.5rem;color:var(--text-primary);">No Properties Yet</h3>
+                    <p style="color:var(--text-muted);">Get started by adding your first property to manage.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/dashboard.js"></script>
+    <script>
+        lucide.createIcons();
+
+        // ─── Property Management Script ────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            const propertiesGrid = document.getElementById('properties-grid');
+            const emptyState = document.getElementById('empty-state');
+            const btnAddProperty = document.getElementById('btn-add-property');
+
+            // Initialize local storage properties if none exist
+            let properties = JSON.parse(localStorage.getItem('staywise_properties') || '[]');
+
+            // Add initial mock property if first load
+            if (!localStorage.getItem('staywise_properties_init')) {
+                properties = [{
+                    id: 'green-heights',
+                    name: 'Green Heights PG',
+                    location: 'Sector 45, Gurgaon',
+                    totalCapacity: 0,
+                    occupied: 0,
+                    floors: []
+                }];
+                localStorage.setItem('staywise_properties', JSON.stringify(properties));
+                localStorage.setItem('staywise_properties_init', 'true');
+            }
+
+            function renderProperties() {
+                propertiesGrid.innerHTML = '';
+                if (properties.length === 0) {
+                    emptyState.style.display = 'block';
+                    propertiesGrid.style.display = 'none';
+                } else {
+                    emptyState.style.display = 'none';
+                    propertiesGrid.style.display = 'grid';
+
+                    properties.forEach(prop => {
+                        // Determine icon based on property type
+                        let typeIcon = 'building-2';
+                        let propTypeStr = prop.type || 'PG';
+                        if (propTypeStr === 'Office Space' || propTypeStr === 'Commercial Space') typeIcon = 'briefcase';
+                        else if (propTypeStr === 'RK' || propTypeStr === 'BHK') typeIcon = 'home';
+
+                        const card = document.createElement('div');
+                        card.className = 'property-card';
+                        card.style.background = 'var(--surface-card)';
+                        card.style.border = '1px solid var(--border)';
+                        card.style.borderRadius = 'var(--radius-lg)';
+                        card.style.padding = 'var(--space-5)';
+                        card.style.cursor = 'pointer';
+                        card.style.transition = 'all 0.2s';
+                        card.style.display = 'flex';
+                        card.style.flexDirection = 'column';
+
+                        let unitLabel = 'Beds';
+                        if (propTypeStr === 'Office Space') unitLabel = 'Desks';
+                        else if (propTypeStr === 'Commercial Space') unitLabel = 'Spaces';
+                        else if (propTypeStr === 'RK' || propTypeStr === 'BHK') unitLabel = 'Units';
+
+                        card.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                                <div>
+                                    <h3 style="margin-bottom: 0.25rem; display: flex; align-items: center; gap: 8px;">
+                                        ${prop.name}
+                                        <span class="badge" style="background: var(--brand-50); color: var(--brand-600); font-size: 0.7rem; padding: 2px 6px;"><i data-lucide="${typeIcon}" style="width:10px;height:10px;margin-right:4px;"></i>${propTypeStr}</span>
+                                    </h3>
+                                    <p class="text-sm text-muted" style="display: flex; align-items: center; gap: 4px;">
+                                        <i data-lucide="map-pin" style="width:14px;height:14px;"></i> ${prop.location}
+                                    </p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: var(--space-4); margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+                                <div>
+                                    <p class="text-xs text-muted">${unitLabel}</p>
+                                    <p style="font-weight: 600;">${prop.totalCapacity}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-muted">Occupancy</p>
+                                    <p style="font-weight: 600;">${prop.totalCapacity > 0 ? Math.round((prop.occupied / prop.totalCapacity) * 100) : 0}%</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" style="width: 100%;">Manage Property</button>
+                        `;
+
+                        card.addEventListener('click', () => {
+                            window.location.href = `property-detail.html?id=${prop.id}`;
+                        });
+
+                        // Hover effect
+                        card.addEventListener('mouseenter', () => card.style.borderColor = 'var(--brand-500)');
+                        card.addEventListener('mouseleave', () => card.style.borderColor = 'var(--border)');
+
+                        propertiesGrid.appendChild(card);
+                    });
+                    lucide.createIcons();
+                }
+            }
+
+            function showAddModal() {
+                const modal = document.createElement('div');
+                modal.className = 'modal active';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Add New Property</h3>
+                            <button class="modal-close" onclick="this.closest('.modal').remove()"><i data-lucide="x"></i></button>
+                        </div>
+                        <div class="form-group">
+                            <label>Property Name</label>
+                            <input type="text" id="prop-name" class="form-control" placeholder="e.g. Sunrise Hostels" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label>Property Type</label>
+                            <select id="prop-type" class="form-control">
+                                <option value="PG">PG / Hostel</option>
+                                <option value="Office Space">Office Space</option>
+                                <option value="RK">RK (Room Kitchen)</option>
+                                <option value="BHK">BHK (House/Apartment)</option>
+                                <option value="Commercial Space">Commercial Space</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" id="prop-location" class="form-control" placeholder="e.g. Koramangala, Bangalore">
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" onclick="this.closest('.modal').remove()">Cancel</button>
+                            <button class="btn btn-primary" id="btn-save-prop">Create Property</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                lucide.createIcons();
+
+                document.getElementById('btn-save-prop').addEventListener('click', () => {
+                    const name = document.getElementById('prop-name').value.trim();
+                    const type = document.getElementById('prop-type').value;
+                    const loc = document.getElementById('prop-location').value.trim();
+                    if (!name) return alert('Property Name is required.');
+
+                    // 1. Prevent exact duplicate names
+                    const isDuplicate = properties.some(p => p.name.toLowerCase() === name.toLowerCase());
+                    if (isDuplicate) {
+                        return alert('A property with this name already exists. Please choose a unique name.');
+                    }
+
+                    // 2. Guarantee a unique ID by appending a timestamp
+                    const uniqueId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now().toString(36);
+
+                    const newProp = {
+                        id: uniqueId,
+                        name: name,
+                        type: type,
+                        location: loc || 'Unspecified location',
+                        totalCapacity: 0,
+                        occupied: 0,
+                        floors: []
+                    };
+                    properties.push(newProp);
+                    localStorage.setItem('staywise_properties', JSON.stringify(properties));
+                    renderProperties();
+                    modal.remove();
+                });
+            }
+
+            btnAddProperty.addEventListener('click', showAddModal);
+            renderProperties();
+        });
+    </script>
+</body>
+
+</html>

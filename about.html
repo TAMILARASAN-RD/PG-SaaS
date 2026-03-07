@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | StayWise</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i data-lucide="building-2" style="color: white; width: 24px; height: 24px;"></i>
+                </div><span>StayWise</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="features.html" class="nav-link">Features</a></li>
+                <li><a href="pricing.html" class="nav-link">Pricing</a></li>
+                <li><a href="about.html" class="nav-link active">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <a href="auth/login.html" class="nav-link">Log in</a>
+                <a href="auth/signup.html" class="btn btn-primary">Start as Owner</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="section-padding" style="margin-top: 4.5rem;">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <div class="section-header">
+                    <h1>Our Mission</h1>
+                    <p>
+                        StayWise was founded with a simple goal: to modernize the property management experience for PG
+                        and
+                        SG owners in India. We believe that technology should be accessible, beautiful, and powerful
+                        enough
+                        to eliminate manual paperwork and rent reminders.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-top: var(--space-12);">
+                <div class="card">
+                    <h3 style="color: var(--brand-400); margin-bottom: 1rem;">The Vision</h3>
+                    <p>To become the backbone of decentralized living spaces across the globe.</p>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--brand-400); margin-bottom: 1rem;">Our Values</h3>
+                    <p>Efficiency, Transparency, and Community-first design.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 StayWise MVP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>
