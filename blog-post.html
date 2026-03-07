@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post Template | StayWise</title>
+
+    <link rel="stylesheet" href="css/staywise-tokens.css">
+    <link rel="stylesheet" href="css/staywise-components.css">
+    <link rel="stylesheet" href="css/staywise-layout.css">
+    <link rel="stylesheet" href="css/staywise-pages.css">
+
+    <style>
+        .post-header {
+            padding: var(--space-8) 0 var(--space-6);
+            text-align: center;
+            background-color: var(--surface);
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-4);
+            margin-bottom: var(--space-4);
+            font-size: var(--fs-2);
+        }
+
+        .post-category {
+            color: var(--primary);
+            font-weight: var(--fw-bold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .post-date {
+            color: var(--muted);
+        }
+
+        .post-title {
+            font-size: 3rem;
+            /* Larger than fs-6 for article titles */
+            margin-bottom: var(--space-5);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.1;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-3);
+        }
+
+        .author-avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background-color: var(--c-100);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--fs-3);
+            font-weight: var(--fw-bold);
+        }
+
+        .author-details {
+            text-align: left;
+        }
+
+        .author-name {
+            font-weight: var(--fw-bold);
+            font-size: var(--fs-2);
+        }
+
+        .author-role {
+            color: var(--muted);
+            font-size: var(--fs-1);
+        }
+
+        .post-hero-image {
+            margin: 0 auto var(--space-8);
+            max-width: 1000px;
+            aspect-ratio: 21/9;
+            background-color: var(--c-200);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: var(--fw-bold);
+            font-size: var(--fs-4);
+        }
+
+        /* Content Area */
+        .post-content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: var(--space-8);
+        }
+
+        .post-content {
+            font-size: var(--fs-3);
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        .post-content h2 {
+            font-size: var(--fs-5);
+            margin-top: var(--space-6);
+            margin-bottom: var(--space-3);
+        }
+
+        .post-content h3 {
+            font-size: var(--fs-4);
+            margin-top: var(--space-5);
+            margin-bottom: var(--space-2);
+        }
+
+        .post-content p {
+            margin-bottom: var(--space-4);
+            color: var(--text);
+        }
+
+        .post-content ul,
+        .post-content ol {
+            margin-bottom: var(--space-4);
+            padding-left: var(--space-6);
+        }
+
+        .post-content li {
+            margin-bottom: var(--space-2);
+        }
+
+        .post-content blockquote {
+            border-left: 4px solid var(--primary);
+            margin: var(--space-5) 0;
+            padding-left: var(--space-4);
+            font-style: italic;
+            color: var(--muted);
+            font-size: var(--fs-4);
+        }
+
+        /* Related Posts Strip */
+        .related-posts {
+            padding: var(--space-8) 0;
+            background-color: var(--bg);
+            border-top: 1px solid var(--border);
+        }
+
+        .related-posts h2 {
+            text-align: center;
+            margin-bottom: var(--space-6);
+            font-size: var(--fs-5);
+        }
+
+        /* Reusing blog grid elements from blog.html conceptually */
+        .blog-grid {
+            display: grid;
+            gap: var(--space-6);
+        }
+
+        @media (min-width: 768px) {
+            .blog-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .blog-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .blog-card:hover {
+            box-shadow: var(--shadow-2);
+            transform: translateY(-4px);
+        }
+
+        .blog-card-image {
+            aspect-ratio: 16/9;
+            background-color: var(--c-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: var(--fw-bold);
+        }
+
+        .blog-card-content {
+            padding: var(--space-5);
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .blog-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-3);
+            font-size: var(--fs-1);
+        }
+
+        .blog-card-category {
+            color: var(--primary);
+            font-weight: var(--fw-bold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .blog-card-date {
+            color: var(--muted);
+        }
+
+        .blog-card-title {
+            font-size: var(--fs-4);
+            margin-bottom: var(--space-2);
+            line-height: 1.3;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Shared Header -->
+    <header class="header">
+    <div class="container header-container">
+      <a href="/" class="logo"
+                style="font-weight: var(--fw-bold); font-size: var(--fs-4); color: var(--primary); text-decoration: none;">
+                StayWise
+            </a>
+      
+      <!-- Mobile menu toggle -->
+      <input type="checkbox" id="mobile-menu" class="mobile-menu-toggle" aria-label="Toggle mobile menu">
+      <label for="mobile-menu" class="mobile-menu-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+        </svg>
+      </label>
+
+      <div class="nav-wrapper">
+        <nav class="nav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/pages/features.html" class="nav-link">Features</a>
+                <a href="/pages/pricing.html" class="nav-link">Pricing</a>
+                <a href="/pages/about.html" class="nav-link">About</a>
+                <a href="/pages/blog.html" class="nav-link active">Blog</a>
+                <a href="/pages/contact.html" class="nav-link">Contact</a>
+            </nav>
+        <div class="nav-actions">
+                <a href="/demo" class="btn btn-secondary">Request Demo</a>
+                <a href="/trial" class="btn btn-primary">Start Free Trial</a>
+            </div>
+      </div>
+    </div>
+  </header>
+
+    <main>
+        <!-- Post Header -->
+        <article class="post-header">
+            <div class="container" style="padding-left: var(--space-4); padding-right: var(--space-4);">
+                <div class="post-meta">
+                    <span class="post-category">Guides</span>
+                    <span class="post-date">Oct 12, 2023 &bull; 6 min read</span>
+                </div>
+                <h1 class="post-title">How to scale from 50 to 500 units without hiring more staff</h1>
+
+                <div class="post-author mb-8">
+                    <div class="author-avatar">AB</div>
+                    <div class="author-details">
+                        <div class="author-name">Arjun Bhatt</div>
+                        <div class="author-role">Co-Founder & CEO</div>
+                    </div>
+                </div>
+
+                <div class="post-hero-image">
+                    [ Blog Post Hero Image Placeholder ]
+                </div>
+            </div>
+
+            <!-- Content Body -->
+            <div class="post-content-container">
+                <div class="post-content" style="text-align: left;">
+                    <p>Scaling a property management business often feels like a trap. Every new unit you add brings a
+                        proportional increase in administrative overhead. Soon, the margins you thought you'd gain on
+                        volume are entirely consumed by new hires just to manage the chaos.</p>
+
+                    <p>But there’s a fundamental difference between operators who plateau at 50 units and those who
+                        comfortably manage 500+ with a lean team. The secret isn't working harder. It’s operational
+                        leverage through software.</p>
+
+                    <h2>The Breaking Point (Around 50 Units)</h2>
+                    <p>When you start out, manual tracking works. You know all your tenants by name. You can mentally
+                        track who paid on the 1st and who usually pays on the 5th.</p>
+                    <ul>
+                        <li>Spreadsheets are updated faithfully.</li>
+                        <li>WhatsApp messages are sent individually.</li>
+                        <li>Deposits are held in a separate bank account but tracked mentally.</li>
+                    </ul>
+
+                    <blockquote>
+                        "The processes that built your foundation will become the exact bottlenecks holding back your
+                        growth."
+                    </blockquote>
+
+                    <h2>Automating the Revenue Cycle</h2>
+                    <p>The first step to unlocking scale is removing human error from the most critical path: collecting
+                        rent. If your staff is spending the first week of every month chasing invoices, they aren't
+                        working on growth.</p>
+
+                    <h3>1. Natively Integrated Invoicing</h3>
+                    <p>By implementing a system like StayWise, invoices are generated automatically on the precise
+                        billing cycle for each specific lease. It accounts for late fees, partial deposits, and prorated
+                        first months without a human touch.</p>
+
+                    <h3>2. Zero-Touch Reminders</h3>
+                    <p>Gone are the days of manually broadcasting WhatsApp messages. Triggered alerts handle the
+                        communication flow natively.</p>
+
+                    <h2>Conclusion</h2>
+                    <p>You don't need to double your headcount to double your portfolio. You just need to deploy the
+                        right tools that decouple the unit count from your management effort.</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- Related Posts -->
+        <section class="related-posts">
+            <div class="container">
+                <h2>More on this topic</h2>
+                <div class="blog-grid">
+
+                    <!-- Related 1 -->
+                    <a href="/pages/blog-post.html" class="blog-card">
+                        <div class="blog-card-image">[ Abstract Image: Finance ]</div>
+                        <div class="blog-card-content">
+                            <div class="blog-card-meta">
+                                <span class="blog-card-category">Guides</span>
+                                <span class="blog-card-date">Sep 02, 2023</span>
+                            </div>
+                            <h3 class="blog-card-title">The ultimate guide to managing rental deposits</h3>
+                        </div>
+                    </a>
+
+                    <!-- Related 2 -->
+                    <a href="/pages/blog-post.html" class="blog-card">
+                        <div class="blog-card-image">[ Abstract Image: Product ]</div>
+                        <div class="blog-card-content">
+                            <div class="blog-card-meta">
+                                <span class="blog-card-category">Company News</span>
+                                <span class="blog-card-date">Sep 15, 2023</span>
+                            </div>
+                            <h3 class="blog-card-title">Introducing WhatsApp native rent reminders</h3>
+                        </div>
+                    </a>
+
+                    <!-- Related 3 -->
+                    <a href="/pages/blog-post.html" class="blog-card">
+                        <div class="blog-card-image">[ Abstract Image: Tips ]</div>
+                        <div class="blog-card-content">
+                            <div class="blog-card-meta">
+                                <span class="blog-card-category">Tips</span>
+                                <span class="blog-card-date">Sep 28, 2023</span>
+                            </div>
+                            <h3 class="blog-card-title">5 Strategies to reduce tenant turnover by 20%</h3>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Shared Footer -->
+    <footer class="footer-section">
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <h3 style="color: var(--primary); margin-bottom: var(--space-2);">StayWise</h3>
+                <p style="color: var(--muted); font-size: var(--fs-1);">Operational Control for Rental Spaces.
+                    Streamlining property management.</p>
+            </div>
+            <div class="footer-col">
+                <h4 style="margin-bottom: var(--space-3);">Product</h4>
+                <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                    <a href="/pages/features.html" class="nav-link"
+                        style="font-size: var(--fs-1); font-weight: var(--fw-regular);">Features</a>
+                    <a href="/pages/pricing.html" class="nav-link"
+                        style="font-size: var(--fs-1); font-weight: var(--fw-regular);">Pricing</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4 style="margin-bottom: var(--space-3);">Company</h4>
+                <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                    <a href="/pages/about.html" class="nav-link"
+                        style="font-size: var(--fs-1); font-weight: var(--fw-regular);">About</a>
+                    <a href="/pages/blog.html" class="nav-link"
+                        style="font-size: var(--fs-1); font-weight: var(--fw-regular);">Blog</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4 style="margin-bottom: var(--space-3);">Contact</h4>
+                <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+                    <a href="/pages/contact.html" class="nav-link"
+                        style="font-size: var(--fs-1); font-weight: var(--fw-regular);">Contact Us</a>
+                    <a href="mailto:hello@staywise.com" class="nav-link"
+                        style="font-size: var(--fs-1); font-weight: var(--fw-regular);">hello@staywise.com</a>
+                    <span style="color: var(--muted); font-size: var(--fs-1);">+1 (555) 123-4567</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

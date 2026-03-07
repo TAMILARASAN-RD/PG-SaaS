@@ -4,19 +4,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pricing | StayWise</title>
-
+    <title>Pricing | StayWise - Rental Operations SaaS</title>
+    <!-- Assuming fonts and base styles are loaded in tokens.css or layout.css. If not, add Inter font here if required.-->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons (via CDN for simplicity, or SVG) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Project Styles (same as index.html for consistent header) -->
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/staywise-imported.css">
+
+    <link rel="stylesheet" href="css/staywise-tokens.css">
+    <link rel="stylesheet" href="css/staywise-layout.css">
+    <link rel="stylesheet" href="css/staywise-components.css">
+    <style>
+        /* Modern Pricing Toggle */
+        .billing-toggle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 64px;
+            gap: 16px;
+        }
+
+        .billing-toggle {
+            position: relative;
+            display: inline-flex;
+            background: rgba(0, 0, 0, 0.04);
+            border-radius: 999px;
+            padding: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .billing-toggle button {
+            position: relative;
+            background: transparent;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            color: var(--muted);
+            transition: color 0.3s ease;
+            z-index: 10;
+        }
+
+        .billing-toggle button.active {
+            color: var(--text);
+        }
+
+        .toggle-switch {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            height: calc(100% - 8px);
+            width: 100px;
+            background: #ffffff;
+            border-radius: 999px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+        }
+
+        /* Annual toggle active state */
+        .billing-toggle[data-active="annual"] .toggle-switch {
+            transform: translateX(100px);
+            /* Adjust based on button width */
+            width: 170px;
+        }
+
+        .billing-discount {
+            color: #16a34a;
+            font-size: 0.75rem;
+            font-weight: 800;
+            background: #dcfce7;
+            padding: 4px 10px;
+            border-radius: 999px;
+            margin-left: 8px;
+            border: 1px solid rgba(22, 163, 74, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Pricing Cards Refined */
+        .pricing-card {
+            padding: 40px;
+            border-radius: 20px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            height: 100%;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--primary);
+            box-shadow: 0 20px 25px -5px rgba(0, 119, 182, 0.15), 0 10px 10px -5px rgba(0, 119, 182, 0.1);
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-8px);
+        }
+
+        @media (max-width: 1024px) {
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-8px);
+            }
+        }
+
+        .card-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--c-700), var(--c-500));
+            color: white;
+            padding: 4px 16px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            box-shadow: 0 4px 6px rgba(0, 119, 182, 0.3);
+        }
+
+        /* Premium Feature List */
+        .pricing-features {
+            list-style: none;
+            margin: 0 0 40px 0;
+            padding: 0;
+            flex-grow: 1;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            color: var(--text);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .pricing-features .check {
+            color: var(--primary);
+            margin-right: 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Refined Pricing Table */
+        .pricing-table-container {
+            overflow-x: auto;
+            margin-top: 40px;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: separate;
+            /* Changed for border-radius on rows */
+            border-spacing: 0;
+            text-align: left;
+            min-width: 900px;
+        }
+
+        .pricing-table th,
+        .pricing-table td {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .pricing-table th {
+            font-weight: 700;
+            color: #334155;
+            background-color: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .pricing-table thead th {
+            background-color: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 1.1rem;
+        }
+
+        .pricing-table tbody tr:hover td,
+        .pricing-table tbody tr:hover th.row-header {
+            background-color: #f8fafc;
+        }
+
+        .pricing-table tbody tr:last-child td,
+        .pricing-table tbody tr:last-child th {
+            border-bottom: none;
+        }
+
+        .pricing-table th.row-header {
+            background-color: #ffffff;
+            font-weight: 600;
+            color: #475569;
+            width: 35%;
+        }
+
+        .pricing-table td {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.95rem;
+            width: 21.6%;
+        }
+
+        /* Group headers */
+        .pricing-table .feature-group th {
+            background-color: #f1f5f9;
+            color: #64748b;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 16px 24px;
+            font-weight: 800;
+        }
+
+        .icon-check {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(39, 201, 63, 0.15);
+            color: #16a34a;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .icon-dash {
+            display: inline-block;
+            width: 12px;
+            height: 2px;
+            background-color: #cbd5e1;
+            border-radius: 2px;
+        }
+
+        /* Modern Accordion / FAQ */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .faq-item {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .faq-item h4 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .faq-item p {
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+    </style>
 </head>
 
-<body>
-    <!-- Navbar -->
+<body class="bg-bg text-text font-sans antialiased">
+    <!-- Header Placeholder -->
+        <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <a href="index.html" class="logo">
@@ -30,95 +326,392 @@
                 <li><a href="features.html" class="nav-link">Features</a></li>
                 <li><a href="pricing.html" class="nav-link active">Pricing</a></li>
                 <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="blogs.html" class="nav-link">Blogs</a></li>
                 <li><a href="contact.html" class="nav-link">Contact</a></li>
             </ul>
 
             <div class="nav-actions">
                 <a href="auth/login.html" class="nav-link">Log in</a>
-                <a href="auth/signup.html" class="btn btn-primary">Start for Free</a>
+                <a href="auth/signup.html" class="btn btn-primary">Start as Owner</a>
             </div>
         </div>
     </nav>
 
-    <main class="section-padding" style="margin-top: 4.5rem;">
-        <div class="container">
-            <div class="section-header">
-                <h1>Simple, Transparent Pricing</h1>
-            </div>
+    <main>
+        <!-- Pricing Hero Section -->
+        <section class="section"
+            style="padding-top: 140px; padding-bottom: 40px; text-align: center; background: radial-gradient(circle at top, var(--c-100) 0%, var(--bg) 60%);">
+            <div class="container" style="max-width: 800px; position: relative; z-index: 10;">
+                <div class="badge mx-auto mb-6"
+                    style="background: white; border: 1px solid var(--border); box-shadow: var(--shadow-sm); color: var(--primary);">
+                    TRANSPARENT PRICING</div>
+                <h1
+                    style="font-size: 4.5rem; font-weight: 800; letter-spacing: -0.04em; color: var(--text); margin-bottom: 24px; line-height: 1.1;">
+                    Simple pricing,<br /> <span
+                        style="background: linear-gradient(90deg, var(--c-800), var(--c-500)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">no
+                        surprises.</span>
+                </h1>
+                <p
+                    style="font-size: 1.25rem; color: var(--muted); margin-bottom: 48px; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    We don't charge per seat. Invite your entire team to collaborate without worrying about expanding
+                    costs.
+                </p>
 
-            <div class="grid-3" style="max-width: 1000px; margin: 0 auto; text-align: left;">
-                <!-- Basic -->
-                <div class="card">
-                    <h3 style="color: var(--brand-500);">Basic</h3>
-                    <div style="margin: 1.5rem 0;">
-                        <span style="font-size: 2.5rem; font-weight: 800;">Free</span>
+                <!-- Interactive Toggle UI (Visual Simulation) -->
+                <div class="billing-toggle-container">
+                    <div class="billing-toggle" data-active="monthly">
+                        <div class="toggle-switch"></div>
+                        <button class="active" style="width: 100px;">Monthly</button>
+                        <button style="width: 170px;">Annually <span class="billing-discount">Save 20%</span></button>
                     </div>
-                    <p style="margin-bottom: 2rem; color: var(--text-secondary);">For single property owners starting
-                        out.</p>
-                    <ul style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.75rem;">
-                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
-                            Up to 10 Tenants</li>
-                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
-                            Basic Reports</li>
-                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
-                            Email Support</li>
-                    </ul>
-                    <a href="auth/signup.html" class="btn btn-secondary w-full">Get Started</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Cards -->
+        <section class="section" style="padding-top: 0; position: relative; z-index: 20;">
+            <div class="container">
+                <div class="grid grid-3" style="align-items: stretch; gap: 32px;">
+                    <!-- Starter Plan -->
+                    <div class="pricing-card">
+                        <div style="margin-bottom: 32px;">
+                            <h3 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 8px; color: #1e293b;">
+                                Starter</h3>
+                            <p style="color: #64748b; font-size: 0.95rem; line-height: 1.5; min-height: 44px;">Perfect
+                                for individual owners managing a single property.</p>
+                        </div>
+                        <div style="margin-bottom: 32px; display: flex; align-items: baseline;">
+                            <span class="price-value" data-monthly="₹499" data-annual="₹399"
+                                style="font-size: 3.5rem; font-weight: 800; color: #0f172a; letter-spacing: -0.04em;">₹499</span>
+                            <span class="price-suffix"
+                                style="font-size: 1rem; font-weight: 600; color: #94a3b8; margin-left: 8px;">/mo</span>
+                        </div>
+                        <a href="contact.html" class="btn btn-secondary"
+                            style="width: 100%; justify-content: center; margin-bottom: 40px; padding: 14px 0; font-size: 1rem; border-color: #cbd5e1; color: #334155;">Get
+                            Started</a>
+
+                        <div
+                            style="font-size: 0.85rem; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px;">
+                            What's included</div>
+                        <ul class="pricing-features">
+                            <li><span class="check">✓</span> Up to 20 units</li>
+                            <li><span class="check">✓</span> Basic rent ledger</li>
+                            <li><span class="check">✓</span> Occupancy grid view</li>
+                            <li><span class="check">✓</span> 1 Admin User</li>
+                            <li><span class="check">✓</span> Standard Email Support</li>
+                        </ul>
+                    </div>
+
+                    <!-- Growth Plan -->
+                    <div class="pricing-card featured">
+                        <div class="card-badge">Most Popular</div>
+                        <div style="margin-bottom: 32px;">
+                            <h3
+                                style="font-size: 1.75rem; font-weight: 800; margin-bottom: 8px; color: var(--primary);">
+                                Growth</h3>
+                            <p style="color: #64748b; font-size: 0.95rem; line-height: 1.5; min-height: 44px;">For
+                                ambitious operators managing multiple buildings.</p>
+                        </div>
+                        <div style="margin-bottom: 32px; display: flex; align-items: baseline;">
+                            <span class="price-value" data-monthly="₹1499" data-annual="₹1199"
+                                style="font-size: 3.5rem; font-weight: 800; color: #0f172a; letter-spacing: -0.04em;">₹1499</span>
+                            <span class="price-suffix"
+                                style="font-size: 1rem; font-weight: 600; color: #94a3b8; margin-left: 8px;">/mo</span>
+                        </div>
+                        <a href="contact.html" class="btn btn-primary"
+                            style="width: 100%; justify-content: center; margin-bottom: 40px; padding: 14px 0; font-size: 1rem; box-shadow: 0 4px 14px 0 rgba(0, 119, 182, 0.39);">Get
+                            Started</a>
+
+                        <div
+                            style="font-size: 0.85rem; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px;">
+                            Everything in Starter, plus</div>
+                        <ul class="pricing-features">
+                            <li><span class="check">✓</span> Up to 100 units</li>
+                            <li><span class="check">✓</span> Automated WhatsApp reminders</li>
+                            <li><span class="check">✓</span> Digital KYC & agreements</li>
+                            <li><span class="check">✓</span> 5 Manager accounts</li>
+                            <li><span class="check">✓</span> Basic ticketing system</li>
+                        </ul>
+                    </div>
+
+                    <!-- Pro Plan -->
+                    <div class="pricing-card">
+                        <div style="margin-bottom: 32px;">
+                            <h3 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 8px; color: #1e293b;">Pro
+                            </h3>
+                            <p style="color: #64748b; font-size: 0.95rem; line-height: 1.5; min-height: 44px;">For large
+                                scale commercial and institutional portfolios.</p>
+                        </div>
+                        <div style="margin-bottom: 32px; display: flex; align-items: center; height: 60px;">
+                            <span
+                                style="font-size: 2.5rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em;">Custom</span>
+                        </div>
+                        <a href="contact.html" class="btn btn-secondary"
+                            style="width: 100%; justify-content: center; margin-bottom: 40px; padding: 14px 0; font-size: 1rem; border-color: #cbd5e1; color: #334155;">Contact
+                            Sales</a>
+
+                        <div
+                            style="font-size: 0.85rem; font-weight: 700; color: #334155; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px;">
+                            Everything in Growth, plus</div>
+                        <ul class="pricing-features">
+                            <li><span class="check">✓</span> Unlimited units</li>
+                            <li><span class="check">✓</span> Unlimited roles & permissions</li>
+                            <li><span class="check">✓</span> API & Webhook integrations</li>
+                            <li><span class="check">✓</span> Custom automated workflows</li>
+                            <li><span class="check">✓</span> Dedicated Customer Success Mgr</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Comparison Matrix -->
+        <section class="section" style="background-color: #f8fafc; padding: 100px 0;">
+            <div class="container">
+                <div class="section-header text-center" style="margin-bottom: 64px;">
+                    <h2 class="section-title" style="font-size: 2.5rem;">Compare plan features</h2>
+                    <p class="section-subtitle" style="font-size: 1.125rem;">Find the right combination of tools for
+                        your operational scale.</p>
                 </div>
 
-                <!-- Pro -->
-                <div class="card" style="border-color: var(--brand-500); transform: scale(1.05); position: relative;">
+                <div class="pricing-table-container">
+                    <table class="pricing-table">
+                        <thead>
+                            <tr>
+                                <th style="border-top-left-radius: 16px;">Features</th>
+                                <th style="text-align: center;">Starter</th>
+                                <th style="text-align: center; color: var(--primary);">Growth</th>
+                                <th style="text-align: center; border-top-right-radius: 16px;">Pro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Core Limits -->
+                            <tr class="feature-group">
+                                <th colspan="4">Usage Limits</th>
+                            </tr>
+                            <tr>
+                                <th class="row-header">Total Units / Beds</th>
+                                <td>Up to 20</td>
+                                <td style="font-weight: 600; color: #334155;">Up to 100</td>
+                                <td>Unlimited</td>
+                            </tr>
+                            <tr>
+                                <th class="row-header">Admin/Manager Accounts</th>
+                                <td>1</td>
+                                <td style="font-weight: 600; color: #334155;">5</td>
+                                <td>Unlimited</td>
+                            </tr>
+                            <tr>
+                                <th class="row-header">Properties Tracker</th>
+                                <td>Single Building</td>
+                                <td style="font-weight: 600; color: #334155;">Up to 5 Buildings</td>
+                                <td>Unlimited Portfolios</td>
+                            </tr>
+                            <tr>
+                                <th class="row-header">File Storage (KYC/Docs)</th>
+                                <td>1 GB</td>
+                                <td style="font-weight: 600; color: #334155;">10 GB</td>
+                                <td>Unlimited</td>
+                            </tr>
+
+                            <!-- Core Features -->
+                            <tr class="feature-group">
+                                <th colspan="4">Property Management</th>
+                            </tr>
+                            <tr>
+                                <th class="row-header">Occupancy Tracking Grid</th>
+                                <td><span class="icon-check">✓</span></td>
+                                <td><span class="icon-check">✓</span></td>
+                                <td><span class="icon-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <th class="row-header">Rent & Deposit Ledger</th>
+                                <td><span class="icon-check">✓</span></td>
+                                <td><span class="icon-check">✓</span></td>
+                                <td><span class="icon-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <th class="row-header">Utility Bill Splitting</th>
+                                <td><span class="icon-dash"></span></td>
+                                <td><span class="icon-check">✓</span></td>
+                                <td><span class="icon-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <th class="row-header">Automated Waitlist</th>
+                                <td><span class="icon-dash"></span></td>
+                                <td><span class="icon-check">✓</span></td>
+                                <td><span class="icon-check">✓</span></td>
+                            </tr>
+
+                            <!-- Operations -->
+                            <tr class="feature-group">
+                                <th colspan="4">Tenant Operations</th>
+                            </tr>
+                            <tr>
+                                <th class="row-header">Automated Reminders</th>
+                                <td><span class="icon-dash"></span></td>
+                                <td style="font-weight: 600; color: #334155;">WhatsApp + Email</td>
+                                <td>WhatsApp + SMS + Email</td>
+                            </tr>
+                            <tr>
+                                <th class="row-header">Complaint Ticketing System</th>
+                                <td>Basic Status Tracking</td>
+                                <td style="font-weight: 600; color: #334155;">In-App + Vendor Assign</td>
+                                <td>Custom Workflows</td>
+                            </tr>
+                            <tr>
+                                <th class="row-header">Custom Rental Agreements</th>
+                                <td><span class="icon-dash"></span></td>
+                                <td><span class="icon-check">✓</span></td>
+                                <td><span class="icon-check">✓</span></td>
+                            </tr>
+
+                            <!-- Advanced -->
+                            <tr class="feature-group">
+                                <th colspan="4">Support & Integrations</th>
+                            </tr>
+                            <tr>
+                                <th class="row-header">Support Levels</th>
+                                <td>Email (48h SLA)</td>
+                                <td style="font-weight: 600; color: #334155;">Priority Email (12h SLA)</td>
+                                <td>24/7 Phone + CSM</td>
+                            </tr>
+                            <tr>
+                                <th class="row-header">Data Export (CSV/PDF)</th>
+                                <td><span class="icon-check">✓</span></td>
+                                <td><span class="icon-check">✓</span></td>
+                                <td><span class="icon-check">✓</span></td>
+                            </tr>
+                            <tr>
+                                <th class="row-header">API Access</th>
+                                <td><span class="icon-dash"></span></td>
+                                <td><span class="icon-dash"></span></td>
+                                <td><span class="icon-check">✓</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Sections Redesigned -->
+        <section class="section" style="padding: 100px 0;">
+            <div class="container" style="max-width: 900px;">
+                <h2 class="section-title text-center" style="margin-bottom: 48px; font-size: 2.5rem;">Frequently Asked
+                    Questions</h2>
+
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4>Can I change my plan later?</h4>
+                        <p>Absolutely! You can upgrade or downgrade your plan at any time from your billing dashboard.
+                            Changes to annual plans will be prorated automatically based on your usage.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>What exactly counts as a "Unit"?</h4>
+                        <p>A "Unit" is any individual rentable placeholder in the system. In a PG or hostel, a single
+                            bed is one unit. In a residential apartment building, an entire flat counts as one unit.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>Is my tenant data secure?</h4>
+                        <p>Yes. StayWise uses enterprise-grade AWS encryption for all database records and document
+                            uploads (like sensitive KYC details), ensuring absolute privacy and legal compliance.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>How does the 20% discount work?</h4>
+                        <p>When you select the Annual billing toggle, you pay upfront for the whole year instead of
+                            monthly. This longer commitment allows us to offer you a 20% discount on the total price.
+                        </p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>Do I need a credit card to start trial?</h4>
+                        <p>No. You can start the 14-day free trial on the Growth plan with just your email. We only ask
+                            for payment details when you decide to continue using the platform post-trial.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h4>What happens if I cross my unit limit?</h4>
+                        <p>You will receive a notification when you are close to your limit. Once exceeded, you won't be
+                            able to add new units until you upgrade the plan, but existing units remain fully active.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA banner -->
+        <section class="section">
+            <div class="container">
+                <div
+                    style="background: linear-gradient(135deg, var(--c-900), var(--c-700)); border-radius: var(--radius-lg); padding: 100px 40px; text-align: center; color: white; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); position: relative; overflow: hidden;">
+                    <!-- Decorative background circles for CTA -->
                     <div
-                        style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--brand-600); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">
-                        MOST POPULAR</div>
-                    <h3 style="color: var(--brand-500);">Pro</h3>
-                    <div style="margin: 1.5rem 0;">
-                        <span style="font-size: 2.5rem; font-weight: 800;">₹999</span>
-                        <span style="color: var(--text-secondary);">/month</span>
+                        style="position: absolute; top: -100px; left: -100px; width: 300px; height: 300px; border-radius: 50%; background: white; opacity: 0.05;">
                     </div>
-                    <p style="margin-bottom: 2rem; color: var(--text-secondary);">For professional SG/PG businesses.</p>
-                    <ul style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.75rem;">
-                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
-                            Unlimited Tenants</li>
-                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
-                            WhatsApp Automation</li>
-                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
-                            Advanced Analytics</li>
-                    </ul>
-                    <a href="auth/signup.html" class="btn btn-primary w-full">Try Pro Free</a>
-                </div>
+                    <div
+                        style="position: absolute; bottom: -150px; right: -50px; width: 400px; height: 400px; border-radius: 50%; background: white; opacity: 0.05;">
+                    </div>
 
-                <!-- Enterprise -->
-                <div class="card">
-                    <h3 style="color: var(--brand-500);">Enterprise</h3>
-                    <div style="margin: 1.5rem 0;">
-                        <span style="font-size: 2.5rem; font-weight: 800;">Custom</span>
+                    <h2
+                        style="font-size: 3.5rem; font-weight: 800; margin-bottom: 24px; letter-spacing: -0.03em; position: relative; z-index: 10; color: white;">
+                        Ready to upgrade your rental ops?</h2>
+                    <p
+                        style="font-size: 1.25rem; opacity: 0.9; margin-bottom: 48px; max-width: 600px; margin-left: auto; margin-right: auto; position: relative; z-index: 10; color: white;">
+                        Join hundreds of property operators who are scaling their business with StayWise.
+                    </p>
+                    <div
+                        style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 10;">
+                        <a href="contact.html" class="btn btn-lg"
+                            style="background: white; color: var(--c-900); font-weight: 700;">Start Free Trial</a>
+                        <a href="contact.html" class="btn btn-lg"
+                            style="background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;">Contact
+                            Sales</a>
                     </div>
-                    <p style="margin-bottom: 2rem; color: var(--text-secondary);">For large property networks.</p>
-                    <ul style="margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.75rem;">
-                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
-                            Multi-property Management</li>
-                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
-                            Custom API Access</li>
-                        <li><i data-lucide="check" style="width: 16px; color: var(--success); margin-right: 8px;"></i>
-                            24/7 Priority Support</li>
-                    </ul>
-                    <a href="contact.html" class="btn btn-secondary w-full">Contact Sales</a>
                 </div>
             </div>
-        </div>
+        </section>
+
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2026 StayWise MVP. All rights reserved.</p>
-            </div>
-        </div>
+    <!-- Footer Placeholder -->
+    <footer id="footer-placeholder"
+        style="padding: 64px 24px 24px; color: var(--muted); border-top: 1px solid var(--border);">
     </footer>
 
-    <script src="js/main.js"></script>
+    <!-- Shared Snippets Script -->
+    <script src="js/staywise-shared-snippets.js"></script>
+
+    <!-- Script for toggle animation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleContainer = document.querySelector('.billing-toggle');
+            const priceValues = document.querySelectorAll('.price-value');
+            if (toggleContainer) {
+                const buttons = toggleContainer.querySelectorAll('button');
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        buttons.forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+
+                        if (e.target.innerText.includes('Annually')) {
+                            toggleContainer.setAttribute('data-active', 'annual');
+                            priceValues.forEach(el => {
+                                el.innerText = el.getAttribute('data-annual');
+                            });
+                        } else {
+                            toggleContainer.setAttribute('data-active', 'monthly');
+                            priceValues.forEach(el => {
+                                el.innerText = el.getAttribute('data-monthly');
+                            });
+                        }
+                    });
+                });
+            }
+        });
+    </script>
     <script>lucide.createIcons();</script>
 </body>
 

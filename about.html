@@ -4,28 +4,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | StayWise</title>
-
+    <title>About Us | StayWise - Rental Operations SaaS</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons (via CDN for simplicity, or SVG) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Project Styles (same as index.html for consistent header) -->
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/staywise-imported.css">
+
+    <link rel="stylesheet" href="css/staywise-tokens.css">
+    <link rel="stylesheet" href="css/staywise-layout.css">
+    <link rel="stylesheet" href="css/staywise-components.css">
+    <style>
+        /* Premium Hero Section */
+        .about-hero {
+            padding: 160px 24px 100px;
+            background: linear-gradient(180deg, var(--c-50) 0%, var(--bg) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle Grid Background Pattern */
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image:
+                linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Founder Story Section Refinements */
+        .story-container {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+        }
+
+        .story-text-column {
+            flex: 1.2;
+            padding-right: 24px;
+        }
+
+        .story-text-column p {
+            font-size: 1.125rem;
+            color: var(--muted);
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .story-text-column p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .story-image-column {
+            flex: 1;
+            position: relative;
+        }
+
+        .story-image {
+            width: 100%;
+            height: 550px;
+            background: linear-gradient(135deg, var(--c-300), var(--c-200));
+            border-radius: 24px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Decorative visual elements around the founder image */
+        .story-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.4));
+            z-index: 1;
+        }
+
+        .image-caption {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            z-index: 2;
+            color: white;
+            text-align: left;
+        }
+
+        .decorative-blob {
+            position: absolute;
+            bottom: -60px;
+            right: -60px;
+            width: 250px;
+            height: 250px;
+            background: var(--c-500);
+            border-radius: 50%;
+            opacity: 0.15;
+            filter: blur(40px);
+            z-index: -1;
+        }
+
+        /* Modern Vanity Stats Grid */
+        .stats-wrapper {
+            margin-top: 100px;
+            border-top: 1px solid var(--border);
+            padding-top: 64px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .stat-card {
+            padding: 24px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Subtle dividers between stats */
+        .stat-card:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20%;
+            right: 0;
+            bottom: 20%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--border), transparent);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 8px;
+            letter-spacing: -0.04em;
+        }
+
+        .stat-label {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Core Values Cards Refined */
+        .value-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px 32px;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 119, 182, 0.2);
+        }
+
+        .value-icon-wrapper {
+            width: 56px;
+            height: 56px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 32px;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 800;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Subtle colored highlight block on hover */
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--c-800), var(--c-500));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .value-card:hover::before {
+            opacity: 1;
+        }
+
+        @media (max-width: 992px) {
+            .story-container {
+                flex-direction: column;
+                gap: 64px;
+            }
+
+            .story-text-column {
+                padding-right: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 40px 24px;
+            }
+
+            .stat-card:nth-child(2)::after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card::after {
+                display: none !important;
+            }
+
+            .about-hero {
+                padding-top: 120px;
+            }
+        }
+    </style>
 </head>
 
-<body>
+<body class="bg-bg text-text font-sans antialiased">
+    <!-- Header Placeholder -->
+        <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <a href="index.html" class="logo">
-                <div class="logo-icon"><i data-lucide="building-2" style="color: white; width: 24px; height: 24px;"></i>
-                </div><span>StayWise</span>
+                <div class="logo-icon">
+                    <i data-lucide="building-2" style="color: white; width: 24px; height: 24px;"></i>
+                </div>
+                <span>StayWise</span>
             </a>
+
             <ul class="nav-links">
                 <li><a href="features.html" class="nav-link">Features</a></li>
                 <li><a href="pricing.html" class="nav-link">Pricing</a></li>
                 <li><a href="about.html" class="nav-link active">About</a></li>
+                <li><a href="blogs.html" class="nav-link">Blogs</a></li>
                 <li><a href="contact.html" class="nav-link">Contact</a></li>
             </ul>
 
@@ -36,43 +290,189 @@
         </div>
     </nav>
 
-    <main class="section-padding" style="margin-top: 4.5rem;">
-        <div class="container">
-            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                <div class="section-header">
-                    <h1>Our Mission</h1>
-                    <p>
-                        StayWise was founded with a simple goal: to modernize the property management experience for PG
-                        and
-                        SG owners in India. We believe that technology should be accessible, beautiful, and powerful
-                        enough
-                        to eliminate manual paperwork and rent reminders.
-                    </p>
-                </div>
+    <main>
+        <!-- Premium Hero Section -->
+        <section class="about-hero">
+            <div class="container hero-content" style="max-width: 800px;">
+                <div class="badge mx-auto mb-6"
+                    style="background: white; border: 1px solid var(--border); box-shadow: var(--shadow-sm); color: var(--primary);">
+                    OUR MISSION</div>
+                <h1
+                    style="font-size: 4.5rem; font-weight: 800; letter-spacing: -0.04em; color: var(--text); margin-bottom: 24px; line-height: 1.1;">
+                    Building the <span
+                        style="background: linear-gradient(90deg, var(--c-800), var(--c-500)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">operating
+                        system</span> for rentals.
+                </h1>
+                <p
+                    style="font-size: 1.25rem; color: var(--muted); line-height: 1.6; max-width: 650px; margin-left: auto; margin-right: auto;">
+                    StayWise exists to eliminate the friction between property owners, managers, and tenants through
+                    simple, powerful, and beautiful software.
+                </p>
             </div>
+        </section>
 
-            <div class="grid-2" style="margin-top: var(--space-12);">
-                <div class="card">
-                    <h3 style="color: var(--brand-400); margin-bottom: 1rem;">The Vision</h3>
-                    <p>To become the backbone of decentralized living spaces across the globe.</p>
+        <!-- Founder Story -->
+        <section class="section" style="padding-top: 100px;">
+            <div class="container">
+                <div class="story-container">
+                    <div class="story-text-column">
+                        <div style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+                            <div style="width: 40px; height: 1px; background: #cbd5e1;"></div>
+                            <span
+                                style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em;">OUR
+                                STORY</span>
+                        </div>
+                        <h2
+                            style="font-size: 3rem; font-weight: 800; margin-bottom: 32px; color: var(--text); letter-spacing: -0.03em; line-height: 1.1;">
+                            It started with a lost spreadsheet.
+                        </h2>
+                        <p>
+                            Like many of our customers, our founding team managed a growing portfolio of accommodations.
+                            And like many operators, the administrative process was exhausting.
+                        </p>
+                        <p>
+                            We spent our weekends chasing rent payments on WhatsApp, losing track of security deposits
+                            in complex Excel files, and dealing with maintenance requests scribbled on physical
+                            notepads. We tried adopting dedicated software, but everything on the market was either
+                            designed for massive commercial skyscrapers, or was too basic—just another glorified ledger.
+                        </p>
+                        <p>
+                            <strong>We couldn't find the tool we wanted, so we built it.</strong>
+                        </p>
+                        <p>
+                            StayWise was designed from the ground up for the modern, multi-property operator who values
+                            clarity and automation over cluttered complexity. We believe property management shouldn't
+                            mean being tied to a desk.
+                        </p>
+                    </div>
+
+                    <div class="story-image-column">
+                        <div class="decorative-blob"></div>
+                        <div class="story-image"
+                            style="background-image: url('images/founder_team_photo.png'); background-size: cover; background-position: center;">
+                            <!-- The image ::after pseudo-element provides the dark gradient overlay -->
+                            <div class="image-caption">
+                                <strong style="display: block; font-size: 1.125rem; margin-bottom: 4px;">Bangalore,
+                                    India</strong>
+                                <span style="opacity: 0.8; font-size: 0.95rem;">StayWise Founding Team, 2026</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3 style="color: var(--brand-400); margin-bottom: 1rem;">Our Values</h3>
-                    <p>Efficiency, Transparency, and Community-first design.</p>
+
+                <!-- Vanity Stats -->
+                <div class="stats-wrapper">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">5K+</div>
+                            <p class="stat-label">Units Managed</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">₹10M+</div>
+                            <p class="stat-label">Rent Processed</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">99%</div>
+                            <p class="stat-label">Collection Rate</p>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">24/7</div>
+                            <p class="stat-label">System Uptime</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- Company Vision / Values -->
+        <section class="section" style="background-color: #f8fafc; padding: 120px 0;">
+            <div class="container">
+                <div class="section-header text-center" style="margin-bottom: 64px;">
+                    <h2 class="section-title" style="font-size: 2.75rem;">Our Core Principles</h2>
+                    <p class="section-subtitle" style="font-size: 1.125rem;">The underlying philosophy that drives every
+                        feature we build.</p>
+                </div>
+
+                <div class="grid grid-3">
+                    <!-- Value 1 -->
+                    <div class="value-card">
+                        <div class="value-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M2 12h5l3-9 5 18 3-9h5" />
+                            </svg>
+                        </div>
+                        <h3
+                            style="font-size: 1.5rem; font-weight: 800; margin-bottom: 16px; color: #1e293b; letter-spacing: -0.02em;">
+                            Radical Clarity</h3>
+                        <p class="text-muted" style="line-height: 1.6; font-size: 1rem;">Software shouldn't require
+                            training manuals. We design every interface to be instantly understandable by operators and
+                            tenants alike, reducing onboarding time to zero.</p>
+                    </div>
+
+                    <!-- Value 2 -->
+                    <div class="value-card">
+                        <div class="value-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                        </div>
+                        <h3
+                            style="font-size: 1.5rem; font-weight: 800; margin-bottom: 16px; color: #1e293b; letter-spacing: -0.02em;">
+                            Automation First</h3>
+                        <p class="text-muted" style="line-height: 1.6; font-size: 1rem;">If a repetitive task can be
+                            automated—like sending rent reminders, generating contracts, or compiling reports—we build
+                            the system to do it for you while you sleep.</p>
+                    </div>
+
+                    <!-- Value 3 -->
+                    <div class="value-card">
+                        <div class="value-icon-wrapper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                        </div>
+                        <h3
+                            style="font-size: 1.5rem; font-weight: 800; margin-bottom: 16px; color: #1e293b; letter-spacing: -0.02em;">
+                            Absolute Security</h3>
+                        <p class="text-muted" style="line-height: 1.6; font-size: 1rem;">We treat your financial
+                            operations and your tenants' personal KYC documents with bank-level encryption and strict
+                            role-based access controls. No compromises.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Small CTA specific to About page -->
+        <section class="section">
+            <div class="container" style="max-width: 800px; text-align: center;">
+                <h2
+                    style="font-size: 2.5rem; font-weight: 800; margin-bottom: 24px; color: var(--text); letter-spacing: -0.03em;">
+                    Join us on our mission</h2>
+                <p style="font-size: 1.125rem; color: var(--muted); margin-bottom: 32px; line-height: 1.6;">
+                    We are always looking for driven individuals who are passionate about solving complex real estate
+                    operational challenges.
+                </p>
+                <a href="contact.html" class="btn btn-primary btn-lg">View Open Positions</a>
+            </div>
+        </section>
+
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2026 StayWise MVP. All rights reserved.</p>
-            </div>
-        </div>
+    <!-- Footer Placeholder -->
+    <footer id="footer-placeholder"
+        style="padding: 64px 24px 24px; color: var(--muted); border-top: 1px solid var(--border);">
     </footer>
 
-    <script src="js/main.js"></script>
+    <!-- Shared Snippets Script -->
+    <script src="js/staywise-shared-snippets.js"></script>
     <script>lucide.createIcons();</script>
 </body>
 

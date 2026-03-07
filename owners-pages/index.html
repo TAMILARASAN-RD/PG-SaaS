@@ -13,6 +13,146 @@
     <link rel="stylesheet" href="../css/base.css">
     <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="../css/dashboard.css">
+    <style>
+        /* Properties Quick View */
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .property-quick-card {
+            background: var(--surface-card, #fff);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg, 12px);
+            padding: 1.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .property-quick-card:hover {
+            border-color: var(--brand-400, #599eff);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .pqc-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .pqc-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-primary, #0f172a);
+        }
+
+        .pqc-type {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pqc-location {
+            font-size: 0.8rem;
+            color: var(--text-muted, #64748b);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pqc-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .pqc-stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pqc-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted, #64748b);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .pqc-stat-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary, #0f172a);
+        }
+
+        .occupancy-bar {
+            height: 6px;
+            background: var(--gray-200, #e2e8f0);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+
+        .occupancy-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.5s ease;
+        }
+
+        .pqc-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pqc-manage-link {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--brand-600, #1d5beb);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pqc-manage-link:hover {
+            color: var(--brand-700, #1647d8);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h3 {
+            margin: 0;
+            font-size: 1.125rem;
+        }
+
+        .overview-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted, #64748b);
+            padding: 2rem;
+            border: 1px dashed var(--border);
+            border-radius: var(--radius-lg, 12px);
+        }
+
+        .empty-state i {
+            margin-bottom: 0.5rem;
+        }
+    </style>
 </head>
 
 <body class="dashboard-page">
@@ -99,23 +239,35 @@
                 <div class="dashboard-grid">
                     <div class="stat-card">
                         <p class="stat-label">Total Properties</p>
-                        <h3 class="stat-value">0</h3>
+                        <h3 class="stat-value" id="stat-total-properties">0</h3>
                     </div>
                     <div class="stat-card">
                         <p class="stat-label">Total Tenants</p>
-                        <h3 class="stat-value">0</h3>
+                        <h3 class="stat-value" id="stat-total-tenants">0</h3>
                     </div>
                     <div class="stat-card">
                         <p class="stat-label">Capacity</p>
-                        <h3 class="stat-value">0%</h3>
+                        <h3 class="stat-value" id="stat-capacity">0%</h3>
                     </div>
                     <div class="stat-card">
                         <p class="stat-label">Monthly Revenue</p>
-                        <h3 class="stat-value">₹0</h3>
+                        <h3 class="stat-value" id="stat-monthly-revenue">₹0</h3>
                     </div>
                 </div>
 
-                <!-- Recent Activity Table -->
+                <!-- Properties Quick View -->
+                <div class="overview-section">
+                    <div class="section-header">
+                        <h3>My Properties</h3>
+                        <a href="../owners-pages/properties.html" class="btn btn-secondary"
+                            style="padding: 0.5rem 1rem;">View All</a>
+                    </div>
+                    <div id="properties-quick-view" class="properties-grid">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+
+                <!-- Recent Rent Payments Table -->
                 <div class="table-card">
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
@@ -134,7 +286,7 @@
                                     <th>Date</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="recent-payments-body">
                                 <tr>
                                     <td colspan="5"
                                         style="text-align: center; color: var(--text-muted); padding: 2rem;">

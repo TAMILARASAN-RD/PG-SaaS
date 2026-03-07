@@ -4,21 +4,423 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Features | StayWise</title>
-
-    <!-- Google Fonts -->
+    <title>Features | StayWise - Rental Operations SaaS</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons (via CDN for simplicity, or SVG) -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Project Styles -->
+    <!-- Project Styles (same as index.html for consistent header) -->
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/staywise-imported.css">
+
+    <link rel="stylesheet" href="css/staywise-tokens.css">
+    <link rel="stylesheet" href="css/staywise-layout.css">
+    <link rel="stylesheet" href="css/staywise-components.css">
+    <style>
+        /* Specific tweaks for features page alternating layout */
+        .feature-showcase-section {
+            padding: 120px 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .feature-showcase-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .feature-showcase-section:nth-child(even) {
+            background-color: var(--surface);
+        }
+
+        /* Unified Stacked Layout */
+        .feature-showcase-grid {
+            display: flex !important;
+            /* Override grid-2 */
+            flex-direction: column;
+            gap: 64px;
+            align-items: center;
+            text-align: center;
+        }
+
+        .feature-showcase-grid>.col-6 {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .feature-showcase-grid ul {
+            text-align: left;
+            display: inline-block;
+            margin: 0 auto;
+        }
+
+        /* Module 2 & 4 have Mockup first, Text second. Swap order */
+        .feature-showcase-section:nth-child(even) .feature-showcase-grid>.col-6:first-child {
+            order: 2;
+        }
+
+        .feature-showcase-section:nth-child(even) .feature-showcase-grid>.col-6:last-child {
+            order: 1;
+        }
+
+        /* Ambient Glow Effects */
+        .ambient-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--c-200) 0%, transparent 70%);
+            opacity: 0.4;
+            z-index: 0;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+
+        .feature-showcase-section:nth-child(odd) .ambient-glow {
+            top: 50%;
+            right: -200px;
+            transform: translateY(-50%);
+        }
+
+        .feature-showcase-section:nth-child(even) .ambient-glow {
+            top: 50%;
+            left: -200px;
+            transform: translateY(-50%);
+        }
+
+        .feature-showcase-grid {
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Swap order on mobile for alternating sections so image is always on top */
+        @media (max-width: 768px) {
+            .feature-showcase-section:nth-child(even) .col-6:first-child {
+                order: 2;
+            }
+
+            .feature-showcase-section:nth-child(even) .col-6:last-child {
+                order: 1;
+                margin-bottom: 40px;
+            }
+        }
+
+        /* Premium UI Mockup Wrappers */
+        .mockup-wrapper {
+            position: relative;
+            padding: 20px;
+            perspective: 1000px;
+        }
+
+        .mockup-window {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 400px;
+            /* Fixed height for consistency */
+            transform: rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.4s ease;
+        }
+
+        .feature-showcase-section:nth-child(even) .mockup-window {
+            transform: rotateY(5deg) rotateX(5deg);
+        }
+
+        .mockup-wrapper:hover .mockup-window {
+            transform: rotateY(0deg) rotateX(0deg) scale(1.02);
+        }
+
+        .mockup-header {
+            height: 48px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 8px;
+        }
+
+        .mockup-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .mockup-dot.red {
+            background: #ff5f56;
+            box-shadow: 0 0 5px rgba(255, 95, 86, 0.3);
+        }
+
+        .mockup-dot.yellow {
+            background: #ffbd2e;
+            box-shadow: 0 0 5px rgba(255, 189, 46, 0.3);
+        }
+
+        .mockup-dot.green {
+            background: #27c93f;
+            box-shadow: 0 0 5px rgba(39, 201, 63, 0.3);
+        }
+
+        .mockup-body {
+            flex-grow: 1;
+            background: #f1f5f9;
+            padding: 24px;
+            display: flex;
+        }
+
+        /* Generic Mockup Elements */
+        .mk-text {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .mk-sidebar {
+            width: 64px;
+            background: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-right: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 24px;
+            gap: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .mk-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: #e2e8f0;
+        }
+
+        .mk-icon.active {
+            background: var(--primary);
+            opacity: 0.8;
+        }
+
+        .mk-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .mk-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .mk-card {
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Mockup 1: Occupancy Grid */
+        .mk-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .mk-room {
+            background: #ffffff;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mk-room-nav {
+            font-size: 10px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 2px;
+        }
+
+        .mk-room-tenant {
+            font-size: 9px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .mk-room-status {
+            padding: 4px 0;
+            border-radius: 4px;
+            margin-top: auto;
+            font-size: 9px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .mk-status-occupied {
+            background: rgba(39, 201, 63, 0.1);
+            border: 1px solid rgba(39, 201, 63, 0.3);
+            color: #16a34a;
+        }
+
+        .mk-status-vacant {
+            background: rgba(255, 95, 86, 0.1);
+            border: 1px solid rgba(255, 95, 86, 0.3);
+            color: #dc2626;
+        }
+
+
+        /* Mockup 2: Tenant Profile */
+        .mk-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .mk-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--c-300), var(--c-500));
+        }
+
+        .mk-lines div {
+            height: 8px;
+            background: #cbd5e1;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .mk-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(39, 201, 63, 0.1);
+            color: #16a34a;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 999px;
+        }
+
+        /* Mockup 3: Ledger */
+        .mk-table {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mk-tr {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+
+        .mk-td-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 40%;
+        }
+
+        .mk-tiny-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #cbd5e1;
+        }
+
+        .mk-td-line {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            width: 60px;
+        }
+
+        .mk-td-badge-paid {
+            padding: 4px 8px;
+            background: rgba(39, 201, 63, 0.1);
+            border-radius: 4px;
+            width: 40px;
+            height: 8px;
+        }
+
+        .mk-td-badge-pending {
+            padding: 4px 8px;
+            background: rgba(255, 189, 46, 0.1);
+            border-radius: 4px;
+            width: 40px;
+            height: 8px;
+        }
+
+        /* Mockup 4: Board */
+        .mk-board {
+            display: flex;
+            gap: 16px;
+            height: 100%;
+        }
+
+        .mk-col {
+            flex: 1;
+            background: #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mk-col-title {
+            height: 12px;
+            width: 60px;
+            background: #cbd5e1;
+            border-radius: 6px;
+            margin-bottom: 4px;
+        }
+
+        .mk-ticket {
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .mk-ticket-line-1 {
+            height: 8px;
+            width: 80%;
+            background: #94a3b8;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .mk-ticket-line-2 {
+            height: 6px;
+            width: 40%;
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+    </style>
 </head>
 
-<body>
-    <!-- Navbar -->
+<body class="bg-bg text-text font-sans antialiased">
+    <!-- Header Placeholder -->
+        <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
             <a href="index.html" class="logo">
@@ -32,6 +434,7 @@
                 <li><a href="features.html" class="nav-link active">Features</a></li>
                 <li><a href="pricing.html" class="nav-link">Pricing</a></li>
                 <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="blogs.html" class="nav-link">Blogs</a></li>
                 <li><a href="contact.html" class="nav-link">Contact</a></li>
             </ul>
 
@@ -42,48 +445,582 @@
         </div>
     </nav>
 
-    <main class="section-padding" style="margin-top: 4.5rem;">
-        <div class="container">
-            <div class="section-header">
-                <h1>Powerful Features for Growth</h1>
-                <p>Everything you need to manage your properties, from lead generation to rent collection.</p>
+    <main>
+        <!-- Hero Section for Features -->
+        <section class="section"
+            style="padding-top: 140px; padding-bottom: 80px; text-align: center; background: radial-gradient(circle at top, var(--c-100) 0%, var(--bg) 60%);">
+            <div class="container" style="max-width: 800px; position: relative; z-index: 10;">
+                <div class="badge mx-auto mb-6"
+                    style="background: white; border: 1px solid var(--border); box-shadow: var(--shadow-sm); color: var(--primary);">
+                    PLATFORM FEATURES</div>
+                <h1
+                    style="font-size: 4rem; font-weight: 800; letter-spacing: -0.04em; color: var(--text); margin-bottom: 24px; line-height: 1.1;">
+                    Everything you need to <span
+                        style="background: linear-gradient(90deg, var(--c-800), var(--c-500)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">run
+                        properties on autopilot.</span>
+                </h1>
+                <p
+                    style="font-size: 1.25rem; color: var(--muted); margin-bottom: 40px; line-height: 1.6; max-width: 650px; margin-left: auto; margin-right: auto;">
+                    From tenant onboarding to rent collection and facility management, StayWise replaces your
+                    spreadsheets and scattered chat apps with one powerful dashboard.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 16px;">
+                    <a href="#property" class="btn btn-secondary"
+                        style="border-radius: 999px; padding: 10px 24px;">Explore Modules ↓</a>
+                </div>
             </div>
+        </section>
 
-            <div class="grid-3">
-                <!-- Feature 1 -->
-                <div class="card">
-                    <div class="card-icon bg-blue"><i data-lucide="layout"></i></div>
-                    <h3>Unified Dashboard</h3>
-                    <p>Get a bird's eye view of all your properties, occupancy rates, and pending payments in one place.
-                    </p>
-                </div>
-                <!-- Feature 2 -->
-                <div class="card">
-                    <div class="card-icon bg-green"><i data-lucide="zap"></i></div>
-                    <h3>Automated SMS/Email</h3>
-                    <p>Send automated rent reminders and payment confirmations directly to your tenants via WhatsApp and
-                        Email.</p>
-                </div>
-                <!-- Feature 3 -->
-                <div class="card">
-                    <div class="card-icon bg-orange"><i data-lucide="file-text"></i></div>
-                    <h3>PDF Receipts</h3>
-                    <p>Generate professional rent receipts and lease agreements instantly with one click.</p>
+        <!-- Module 1: Property Management -->
+        <section id="property" class="feature-showcase-section">
+            <div class="ambient-glow"></div>
+            <div class="container">
+                <div class="grid grid-2 feature-showcase-grid">
+                    <div class="col-6">
+                        <div class="badge mb-4">Property Management</div>
+                        <h2
+                            style="font-size: 2.75rem; font-weight: 800; margin-bottom: 24px; color: var(--text); letter-spacing: -0.03em; line-height: 1.1;">
+                            Centralized portfolio control.</h2>
+                        <p style="font-size: 1.125rem; color: var(--muted); margin-bottom: 32px; line-height: 1.6;">
+                            Manage multiple properties, buildings, and individual units from a single view. Gain
+                            real-time visibility into occupancy rates and availability across your entire portfolio.
+                        </p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="display: flex; align-items: flex-start; margin-bottom: 24px;">
+                                <div
+                                    style="width: 28px; height: 28px; border-radius: 50%; background: var(--c-100); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 16px; font-weight: bold; flex-shrink: 0;">
+                                    ✓</div>
+                                <div>
+                                    <strong
+                                        style="display: block; color: var(--text); font-size: 1.125rem; margin-bottom: 4px;">Visual
+                                        Occupancy Grid</strong>
+                                    <span
+                                        style="color: var(--muted); font-size: 1rem; line-height: 1.5; display: block;">Instantly
+                                        see which beds or rooms are vacant, occupied, or under maintenance.</span>
+                                </div>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; margin-bottom: 24px;">
+                                <div
+                                    style="width: 28px; height: 28px; border-radius: 50%; background: var(--c-100); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 16px; font-weight: bold; flex-shrink: 0;">
+                                    ✓</div>
+                                <div>
+                                    <strong
+                                        style="display: block; color: var(--text); font-size: 1.125rem; margin-bottom: 4px;">Custom
+                                        Asset Hierarchies</strong>
+                                    <span
+                                        style="color: var(--muted); font-size: 1rem; line-height: 1.5; display: block;">Structure
+                                        your portfolio exactly how you manage it (Building -> Floor -> Room ->
+                                        Bed).</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <div class="mockup-wrapper">
+                            <div class="mockup-window">
+                                <div class="mockup-header">
+                                    <div class="mockup-dot red"></div>
+                                    <div class="mockup-dot yellow"></div>
+                                    <div class="mockup-dot green"></div>
+                                </div>
+                                <div class="mockup-body">
+                                    <div class="mk-sidebar">
+                                        <div class="mk-icon active"></div>
+                                        <div class="mk-icon"></div>
+                                        <div class="mk-icon"></div>
+                                    </div>
+                                    <div class="mk-content">
+                                        <div class="mk-row">
+                                            <div class="mk-card"
+                                                style="flex: 2; height: 60px; display: flex; align-items: center; justify-content: space-between;">
+                                                <div class="mk-text"
+                                                    style="font-size: 14px; font-weight: 600; color: #334155;">Building
+                                                    A - 1st Floor</div>
+                                                <div class="mk-text"
+                                                    style="font-size: 11px; padding: 4px 12px; background: rgba(39,201,63,0.1); color: #16a34a; border-radius: 12px; font-weight: bold;">
+                                                    85% Occupied</div>
+                                            </div>
+                                            <div class="mk-card"
+                                                style="flex: 1; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                                <div class="mk-text"
+                                                    style="font-size: 12px; color: var(--primary); font-weight: 600;">+
+                                                    Filter View</div>
+                                            </div>
+                                        </div>
+                                        <div class="mk-grid mk-text">
+                                            <div class="mk-room">
+                                                <div class="mk-room-nav">Room 101</div>
+                                                <div class="mk-room-tenant">Sarah J.</div>
+                                                <div class="mk-room-status mk-status-occupied">OCCUPIED</div>
+                                            </div>
+                                            <div class="mk-room">
+                                                <div class="mk-room-nav">Room 102</div>
+                                                <div class="mk-room-tenant">Rahul M.</div>
+                                                <div class="mk-room-status mk-status-occupied">OCCUPIED</div>
+                                            </div>
+                                            <div class="mk-room">
+                                                <div class="mk-room-nav">Room 103</div>
+                                                <div class="mk-room-tenant" style="opacity: 0;">None</div>
+                                                <div class="mk-room-status mk-status-vacant">VACANT</div>
+                                            </div>
+                                            <div class="mk-room">
+                                                <div class="mk-room-nav">Room 104</div>
+                                                <div class="mk-room-tenant">Priya S.</div>
+                                                <div class="mk-room-status mk-status-occupied">OCCUPIED</div>
+                                            </div>
+                                            <div class="mk-room">
+                                                <div class="mk-room-nav">Room 105</div>
+                                                <div class="mk-room-tenant" style="opacity: 0;">None</div>
+                                                <div class="mk-room-status mk-status-vacant">VACANT</div>
+                                            </div>
+                                            <div class="mk-room">
+                                                <div class="mk-room-nav">Room 106</div>
+                                                <div class="mk-room-tenant">Amit K.</div>
+                                                <div class="mk-room-status mk-status-occupied">OCCUPIED</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- Module 2: Tenant Management -->
+        <section class="feature-showcase-section" style="background-color: var(--surface);">
+            <div class="ambient-glow"></div>
+            <div class="container">
+                <div class="grid grid-2 feature-showcase-grid">
+                    <div class="col-6">
+                        <div class="mockup-wrapper">
+                            <div class="mockup-window">
+                                <div class="mockup-header">
+                                    <div class="mockup-dot red"></div>
+                                    <div class="mockup-dot yellow"></div>
+                                    <div class="mockup-dot green"></div>
+                                </div>
+                                <div class="mockup-body" style="background: #ffffff; padding: 32px;">
+                                    <div class="mk-content" style="max-width: 400px; margin: 0 auto; width: 100%;">
+                                        <div class="mk-card"
+                                            style="padding: 32px; text-align: center; display: flex; flex-direction: column; align-items: center;">
+                                            <div class="mk-profile-header mk-text"
+                                                style="flex-direction: column; margin-bottom: 24px;">
+                                                <div class="mk-avatar"
+                                                    style="display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold; font-family: 'Inter', sans-serif;">
+                                                    AS</div>
+                                                <div style="text-align: center;">
+                                                    <div
+                                                        style="font-size: 16px; font-weight: 700; color: #334155; margin-bottom: 4px;">
+                                                        Arjun Sharma</div>
+                                                    <div style="font-size: 12px; color: #94a3b8;">Room 304 • Software
+                                                        Eng</div>
+                                                </div>
+                                            </div>
+                                            <div class="mk-badge mb-6 mk-text">KYC VERIFIED</div>
+
+                                            <div style="width: 100%; text-align: left;" class="mk-text">
+                                                <div
+                                                    style="font-size: 10px; color: #94a3b8; font-weight: bold; margin-bottom: 12px; letter-spacing: 0.05em;">
+                                                    DOCUMENTS VAULT</div>
+                                                <div class="mk-tr" style="margin-bottom: 8px;">
+                                                    <div style="display: flex; gap: 12px; align-items: center;">
+                                                        <div
+                                                            style="width: 24px; height: 24px; background: rgba(0,119,182,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 10px; font-weight: bold;">
+                                                            ID</div>
+                                                        <div style="font-size: 12px; font-weight: 500; color: #334155;">
+                                                            Aadhaar_Front.pdf</div>
+                                                    </div>
+                                                    <div style="font-size: 10px; color: #16a34a; font-weight: bold;">
+                                                        Verified</div>
+                                                </div>
+                                                <div class="mk-tr">
+                                                    <div style="display: flex; gap: 12px; align-items: center;">
+                                                        <div
+                                                            style="width: 24px; height: 24px; background: rgba(0,119,182,0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 10px; font-weight: bold;">
+                                                            Doc</div>
+                                                        <div style="font-size: 12px; font-weight: 500; color: #334155;">
+                                                            Rental_Agreement.pdf</div>
+                                                    </div>
+                                                    <div style="font-size: 10px; color: #16a34a; font-weight: bold;">
+                                                        Signed</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="badge mb-4">Tenant Lifecycle</div>
+                        <h2
+                            style="font-size: 2.75rem; font-weight: 800; margin-bottom: 24px; color: var(--text); letter-spacing: -0.03em; line-height: 1.1;">
+                            Frictionless tenant onboarding.</h2>
+                        <p style="font-size: 1.125rem; color: var(--muted); margin-bottom: 32px; line-height: 1.6;">
+                            Digitize your entire tenant lifecycle. From initial inquiry and document collection to
+                            contract signing and move-out inspections.
+                        </p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="display: flex; align-items: flex-start; margin-bottom: 24px;">
+                                <div
+                                    style="width: 28px; height: 28px; border-radius: 50%; background: var(--c-100); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 16px; font-weight: bold; flex-shrink: 0;">
+                                    ✓</div>
+                                <div>
+                                    <strong
+                                        style="display: block; color: var(--text); font-size: 1.125rem; margin-bottom: 4px;">Digital
+                                        KYC Vault</strong>
+                                    <span
+                                        style="color: var(--muted); font-size: 1rem; line-height: 1.5; display: block;">Securely
+                                        store ID proofs, agreements, and background checks in one organized
+                                        profile.</span>
+                                </div>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; margin-bottom: 24px;">
+                                <div
+                                    style="width: 28px; height: 28px; border-radius: 50%; background: var(--c-100); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 16px; font-weight: bold; flex-shrink: 0;">
+                                    ✓</div>
+                                <div>
+                                    <strong
+                                        style="display: block; color: var(--text); font-size: 1.125rem; margin-bottom: 4px;">Automated
+                                        Contract Generation</strong>
+                                    <span
+                                        style="color: var(--muted); font-size: 1rem; line-height: 1.5; display: block;">Generate
+                                        standardized rental agreements instantly with pre-filled tenant data.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Module 3: Rent Automation -->
+        <section class="feature-showcase-section">
+            <div class="ambient-glow"></div>
+            <div class="container">
+                <div class="grid grid-2 feature-showcase-grid">
+                    <div class="col-6">
+                        <div class="badge mb-4">Rent & Deposits</div>
+                        <h2
+                            style="font-size: 2.75rem; font-weight: 800; margin-bottom: 24px; color: var(--text); letter-spacing: -0.03em; line-height: 1.1;">
+                            Zero missed payments.</h2>
+                        <p style="font-size: 1.125rem; color: var(--muted); margin-bottom: 32px; line-height: 1.6;">
+                            Replace manual tracking with our automated rent ledger. Track security deposits, monthly
+                            dues, utility split bills, and generate instant receipts.
+                        </p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="display: flex; align-items: flex-start; margin-bottom: 24px;">
+                                <div
+                                    style="width: 28px; height: 28px; border-radius: 50%; background: var(--c-100); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 16px; font-weight: bold; flex-shrink: 0;">
+                                    ✓</div>
+                                <div>
+                                    <strong
+                                        style="display: block; color: var(--text); font-size: 1.125rem; margin-bottom: 4px;">Automated
+                                        Reminders</strong>
+                                    <span
+                                        style="color: var(--muted); font-size: 1rem; line-height: 1.5; display: block;">Send
+                                        automated WhatsApp or email reminders before and after due dates.</span>
+                                </div>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; margin-bottom: 24px;">
+                                <div
+                                    style="width: 28px; height: 28px; border-radius: 50%; background: var(--c-100); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 16px; font-weight: bold; flex-shrink: 0;">
+                                    ✓</div>
+                                <div>
+                                    <strong
+                                        style="display: block; color: var(--text); font-size: 1.125rem; margin-bottom: 4px;">Split
+                                        Ledger Accounting</strong>
+                                    <span
+                                        style="color: var(--muted); font-size: 1rem; line-height: 1.5; display: block;">Easily
+                                        segregate base rent from variable utility charges (electricity, water,
+                                        Wi-Fi).</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <div class="mockup-wrapper">
+                            <div class="mockup-window">
+                                <div class="mockup-header">
+                                    <div class="mockup-dot red"></div>
+                                    <div class="mockup-dot yellow"></div>
+                                    <div class="mockup-dot green"></div>
+                                </div>
+                                <div class="mockup-body">
+                                    <div class="mk-content">
+                                        <div
+                                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                            <div style="font-weight: bold; color: #334155;">Ledger Overview</div>
+                                            <div
+                                                style="padding: 6px 16px; background: var(--primary); border-radius: 6px; color: white; font-size: 12px;">
+                                                + Record Payment</div>
+                                        </div>
+                                        <div class="mk-table mk-text">
+                                            <div class="mk-tr"
+                                                style="background: transparent; border: none; padding: 0 12px; margin-bottom: 4px;">
+                                                <div
+                                                    style="font-size: 10px; font-weight: bold; color: #94a3b8; width: 45%;">
+                                                    TENANT</div>
+                                                <div
+                                                    style="font-size: 10px; font-weight: bold; color: #94a3b8; width: 25%;">
+                                                    AMOUNT</div>
+                                                <div
+                                                    style="font-size: 10px; font-weight: bold; color: #94a3b8; text-align: right; width: 30%;">
+                                                    STATUS</div>
+                                            </div>
+                                            <div class="mk-tr">
+                                                <div class="mk-td-user">
+                                                    <div class="mk-tiny-avatar" style="background: #2563eb;"></div>
+                                                    <div style="font-size: 12px; font-weight: 600; color: #334155;">
+                                                        Sneha Roy</div>
+                                                </div>
+                                                <div
+                                                    style="font-size: 12px; font-weight: 700; color: #334155; width: 25%;">
+                                                    ₹12,400</div>
+                                                <div
+                                                    style="font-size: 10px; padding: 4px 8px; background: rgba(39,201,63,0.1); color: #16a34a; border-radius: 4px; font-weight: bold; text-align: center;">
+                                                    PAID</div>
+                                            </div>
+                                            <div class="mk-tr">
+                                                <div class="mk-td-user">
+                                                    <div class="mk-tiny-avatar" style="background: #db2777;"></div>
+                                                    <div style="font-size: 12px; font-weight: 600; color: #334155;">
+                                                        Karan V.</div>
+                                                </div>
+                                                <div
+                                                    style="font-size: 12px; font-weight: 700; color: #334155; width: 25%;">
+                                                    ₹15,000</div>
+                                                <div
+                                                    style="font-size: 10px; padding: 4px 8px; background: rgba(255,95,86,0.1); color: #dc2626; border-radius: 4px; font-weight: bold; text-align: center;">
+                                                    OVERDUE</div>
+                                            </div>
+                                            <div class="mk-tr">
+                                                <div class="mk-td-user">
+                                                    <div class="mk-tiny-avatar" style="background: #0d9488;"></div>
+                                                    <div style="font-size: 12px; font-weight: 600; color: #334155;">
+                                                        Meera Das</div>
+                                                </div>
+                                                <div
+                                                    style="font-size: 12px; font-weight: 700; color: #334155; width: 25%;">
+                                                    ₹11,500</div>
+                                                <div
+                                                    style="font-size: 10px; padding: 4px 8px; background: rgba(39,201,63,0.1); color: #16a34a; border-radius: 4px; font-weight: bold; text-align: center;">
+                                                    PAID</div>
+                                            </div>
+                                            <div class="mk-tr">
+                                                <div class="mk-td-user">
+                                                    <div class="mk-tiny-avatar" style="background: #ca8a04;"></div>
+                                                    <div style="font-size: 12px; font-weight: 600; color: #334155;">
+                                                        Rohan Gupta</div>
+                                                </div>
+                                                <div
+                                                    style="font-size: 12px; font-weight: 700; color: #334155; width: 25%;">
+                                                    ₹14,200</div>
+                                                <div
+                                                    style="font-size: 10px; padding: 4px 8px; background: rgba(39,201,63,0.1); color: #16a34a; border-radius: 4px; font-weight: bold; text-align: center;">
+                                                    PAID</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Module 4: Complaint System -->
+        <section class="feature-showcase-section" style="background-color: var(--surface);">
+            <div class="ambient-glow"></div>
+            <div class="container">
+                <div class="grid grid-2 feature-showcase-grid">
+                    <div class="col-6">
+                        <div class="mockup-wrapper">
+                            <div class="mockup-window">
+                                <div class="mockup-header">
+                                    <div class="mockup-dot red"></div>
+                                    <div class="mockup-dot yellow"></div>
+                                    <div class="mockup-dot green"></div>
+                                </div>
+                                <div class="mockup-body" style="overflow-x: auto;">
+                                    <div class="mk-board mk-text">
+                                        <div class="mk-col">
+                                            <div
+                                                style="font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 8px;">
+                                                OPEN (2)</div>
+
+                                            <div class="mk-ticket"
+                                                style="border-left: 3px solid #dc2626; padding-left: 12px; position: relative;">
+                                                <div
+                                                    style="position: absolute; top: 12px; right: 12px; width: 24px; height: 24px; border-radius: 50%; background: #fee2e2; color: #dc2626; font-size: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center;">
+                                                    P1</div>
+                                                <div
+                                                    style="font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 4px; padding-right: 28px;">
+                                                    AC Not Cooling</div>
+                                                <div style="font-size: 10px; color: #94a3b8;">Room 402 • Electrical
+                                                </div>
+                                                <div
+                                                    style="margin-top: 8px; display: flex; align-items: center; gap: 6px;">
+                                                    <div
+                                                        style="width: 16px; height: 16px; border-radius: 50%; background: #cbd5e1;">
+                                                    </div>
+                                                    <span style="font-size: 9px; color: #64748b;">Reported 2h ago</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="mk-ticket"
+                                                style="border-left: 3px solid #eab308; padding-left: 12px; position: relative;">
+                                                <div
+                                                    style="position: absolute; top: 12px; right: 12px; width: 24px; height: 24px; border-radius: 50%; background: #fef9c3; color: #ca8a04; font-size: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center;">
+                                                    P2</div>
+                                                <div
+                                                    style="font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 4px;">
+                                                    Leaky Faucet</div>
+                                                <div style="font-size: 10px; color: #94a3b8;">Room 210 • Plumbing</div>
+                                                <div
+                                                    style="margin-top: 8px; display: flex; align-items: center; gap: 6px;">
+                                                    <div
+                                                        style="width: 16px; height: 16px; border-radius: 50%; background: #cbd5e1;">
+                                                    </div>
+                                                    <span style="font-size: 9px; color: #64748b;">Reported 1d ago</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mk-col">
+                                            <div
+                                                style="font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 8px;">
+                                                IN PROGRESS (1)</div>
+
+                                            <div class="mk-ticket"
+                                                style="border-left: 3px solid #3b82f6; padding-left: 12px;">
+                                                <div
+                                                    style="font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 4px;">
+                                                    Wi-Fi down</div>
+                                                <div style="font-size: 10px; color: #94a3b8;">Building A • IT Support
+                                                </div>
+                                                <div
+                                                    style="margin-top: 8px; font-size: 10px; padding: 4px 8px; background: rgba(59,130,246,0.1); display: inline-block; border-radius: 4px; color: #2563eb; font-weight: bold;">
+                                                    Assigned: Airtel Tech</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mk-col">
+                                            <div
+                                                style="font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 8px;">
+                                                RESOLVED</div>
+
+                                            <div class="mk-ticket"
+                                                style="opacity: 0.6; border-left: 3px solid #16a34a; padding-left: 12px;">
+                                                <div
+                                                    style="font-size: 12px; font-weight: 600; color: #334155; text-decoration: line-through; margin-bottom: 4px;">
+                                                    Broken Geyser</div>
+                                                <div style="font-size: 10px; color: #94a3b8;">Room 105</div>
+                                                <div
+                                                    style="margin-top: 8px; font-size: 9px; color: #16a34a; font-weight: bold;">
+                                                    ✓ Fixed Today</div>
+                                            </div>
+
+                                            <div class="mk-ticket"
+                                                style="opacity: 0.6; border-left: 3px solid #16a34a; padding-left: 12px;">
+                                                <div
+                                                    style="font-size: 12px; font-weight: 600; color: #334155; text-decoration: line-through; margin-bottom: 4px;">
+                                                    Lost keys</div>
+                                                <div style="font-size: 10px; color: #94a3b8;">Room 301</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="badge mb-4">Maintenance</div>
+                        <h2
+                            style="font-size: 2.75rem; font-weight: 800; margin-bottom: 24px; color: var(--text); letter-spacing: -0.03em; line-height: 1.1;">
+                            Streamlined issue resolution.</h2>
+                        <p style="font-size: 1.125rem; color: var(--muted); margin-bottom: 32px; line-height: 1.6;">
+                            No more complaints lost in WhatsApp groups. Tenants can raise tickets directly, and your
+                            staff can track, assign, and resolve them efficiently.
+                        </p>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="display: flex; align-items: flex-start; margin-bottom: 24px;">
+                                <div
+                                    style="width: 28px; height: 28px; border-radius: 50%; background: var(--c-100); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 16px; font-weight: bold; flex-shrink: 0;">
+                                    ✓</div>
+                                <div>
+                                    <strong
+                                        style="display: block; color: var(--text); font-size: 1.125rem; margin-bottom: 4px;">Categorized
+                                        Ticketing</strong>
+                                    <span
+                                        style="color: var(--muted); font-size: 1rem; line-height: 1.5; display: block;">Prioritize
+                                        issues properly (Plumbing, Electrical, Cleaning) with attached photos.</span>
+                                </div>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; margin-bottom: 24px;">
+                                <div
+                                    style="width: 28px; height: 28px; border-radius: 50%; background: var(--c-100); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-right: 16px; font-weight: bold; flex-shrink: 0;">
+                                    ✓</div>
+                                <div>
+                                    <strong
+                                        style="display: block; color: var(--text); font-size: 1.125rem; margin-bottom: 4px;">Vendor
+                                        Management</strong>
+                                    <span
+                                        style="color: var(--muted); font-size: 1rem; line-height: 1.5; display: block;">Assign
+                                        tickets directly to maintenance staff or external vendors and track
+                                        costs.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA (Reused layout style) -->
+        <section class="section">
+            <div class="container">
+                <div
+                    style="background: linear-gradient(135deg, var(--c-900), var(--c-700)); border-radius: var(--radius-lg); padding: 100px 40px; text-align: center; color: white; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); position: relative; overflow: hidden;">
+                    <!-- Decorative background circles for CTA -->
+                    <div
+                        style="position: absolute; top: -100px; left: -100px; width: 300px; height: 300px; border-radius: 50%; background: white; opacity: 0.05;">
+                    </div>
+                    <div
+                        style="position: absolute; bottom: -150px; right: -50px; width: 400px; height: 400px; border-radius: 50%; background: white; opacity: 0.05;">
+                    </div>
+
+                    <h2
+                        style="font-size: 3.5rem; font-weight: 800; margin-bottom: 24px; letter-spacing: -0.03em; position: relative; z-index: 10;">
+                        Ready to simplify your operations?</h2>
+                    <p
+                        style="font-size: 1.25rem; opacity: 0.9; margin-bottom: 48px; max-width: 600px; margin-left: auto; margin-right: auto; position: relative; z-index: 10;">
+                        See why top property operators are switching to StayWise to scale their business.
+                    </p>
+                    <div
+                        style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 10;">
+                        <a href="pricing.html" class="btn btn-lg"
+                            style="background: white; color: var(--c-900); font-weight: 700;">Start Free Trial</a>
+                        <a href="pricing.html" class="btn btn-lg"
+                            style="background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;">View
+                            Pricing</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2026 StayWise MVP. All rights reserved.</p>
-            </div>
-        </div>
+    <!-- Footer Placeholder -->
+    <footer id="footer-placeholder"
+        style="padding: 64px 24px 24px; color: var(--muted); border-top: 1px solid var(--border);">
     </footer>
 
-    <script src="js/main.js"></script>
+    <!-- Shared Snippets Script -->
+    <script src="js/staywise-shared-snippets.js"></script>
     <script>lucide.createIcons();</script>
 </body>
 
